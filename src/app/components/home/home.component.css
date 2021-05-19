@@ -1,0 +1,19 @@
+#copyright {
+    background: transparent;
+    color: rgb(68, 67, 67);
+    margin-bottom: -20px;
+    /* line-height: 80px; */
+    text-align: center;
+    font-size: 15px;
+    font-style: italic;
+    font-family: "Playfair Display", serif;
+    /* font-weight: lighter; */
+  }
+  
+  .container {
+    position: absolute;
+    top: 90%;
+    left: 0%;
+    right: 0%;
+  }
+  

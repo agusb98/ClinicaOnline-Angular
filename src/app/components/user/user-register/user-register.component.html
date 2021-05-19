@@ -1,106 +1,95 @@
-<div class="container p-4 text-center row  mx-auto card text-center">
-    <div class="card-header">
-      <div>
-        <h3>Registro de {{ this.kyndUser }}</h3>
+<div class="container p-4 text-center row mx-auto card text-center">
+  <div class="card-header">
+    <div>
+      <h3>Registro de {{ this.kyndUser }}</h3>
 
-        <select id="select-kynd" [(ngModel)]="kyndUser">
-          <option selected="true" value="Paciente">Paciente</option>
-          <option value="Especialista">Especialista</option>
-        </select>
+      <select id="select-kynd" [(ngModel)]="kyndUser">
+        <option selected="true" value="Paciente">Paciente</option>
+        <option value="Especialista">Especialista</option>
+      </select>
 
-        <div [ngSwitch]="this.kyndUser">
-          <!-- ESPECIALISTA -->
-          <div *ngSwitchCase="'Especialista'">
-            <form [formGroup]="formEspecialista" (ngSubmit)="onRegister()">
-              <input
-                type="text"
-                class="form-control"
-                id="name"
-                placeholder="Ingrese Nombre.."
-                formControlName="name"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formEspecialista.controls.name.errors?.required &&
-                  formEspecialista.controls.name.touched
-                "
-              >
-                Ingrese Nombre
-              </small>
+      <div [ngSwitch]="this.kyndUser">
+        <!-- ESPECIALISTA -->
+        <div *ngSwitchCase="'Especialista'">
+          <form [formGroup]="formEspecialista" (ngSubmit)="onRegister()">
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              placeholder="Ingrese Nombre.."
+              formControlName="name"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formEspecialista.controls.name.errors?.required &&
+                formEspecialista.controls.name.touched
+              "
+            >
+              Ingrese Nombre
+            </small>
 
-              <input
-                type="text"
-                class="form-control"
-                id="surname"
-                placeholder="Ingrese Apellido.."
-                formControlName="surname"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formEspecialista.controls.surname.errors?.required &&
-                  formEspecialista.controls.surname.touched
-                "
-              >
-                Ingrese Apellido
-              </small>
+            <input
+              type="text"
+              class="form-control"
+              id="surname"
+              placeholder="Ingrese Apellido.."
+              formControlName="surname"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formEspecialista.controls.surname.errors?.required &&
+                formEspecialista.controls.surname.touched
+              "
+            >
+              Ingrese Apellido
+            </small>
 
-              <input
-                type="number"
-                class="form-control"
-                id="age"
-                placeholder="Ingrese Edad.."
-                formControlName="age"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formEspecialista.controls.age.errors?.required &&
-                  formEspecialista.controls.age.touched
-                "
-              >
-                Ingrese Edad
-              </small>
-              <small
-                class="invalid"
-                *ngIf="
-                  formEspecialista.controls.age.errors?.min ||
-                  (formEspecialista.controls.age.errors?.max &&
-                    formEspecialista.controls.age.touched)
-                "
-              >
-                Edad Inválida, Rango entre [18 - 99]
-              </small>
+            <input
+              type="number"
+              class="form-control"
+              id="age"
+              placeholder="Ingrese Edad.."
+              formControlName="age"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formEspecialista.controls.age.errors?.required &&
+                formEspecialista.controls.age.touched
+              "
+            >
+              Ingrese Edad
+            </small>
+            <small
+              class="invalid"
+              *ngIf="
+                formEspecialista.controls.age.errors?.min ||
+                (formEspecialista.controls.age.errors?.max &&
+                  formEspecialista.controls.age.touched)
+              "
+            >
+              Edad Inválida, Rango entre [18 - 99]
+            </small>
 
-              <input
-                type="number"
-                class="form-control"
-                id="dni"
-                placeholder="Ingrese DNI.."
-                formControlName="dni"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formEspecialista.controls.dni.errors?.required &&
-                  formEspecialista.controls.dni.touched
-                "
-              >
-                Ingrese DNI
-              </small>
-              <small
-                class="invalid"
-                *ngIf="
-                  formEspecialista.controls.dni.errors?.maxLength &&
-                  formEspecialista.controls.dni.errors?.minLength &&
-                  formEspecialista.controls.dni.touched
-                "
-              >
-                DNI Inválido
-              </small>
+            <input
+              type="number"
+              class="form-control"
+              id="dni"
+              placeholder="Ingrese DNI.."
+              formControlName="dni"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formEspecialista.controls.dni.touched
+              "
+            >
+              Ingrese DNI
+            </small>
 
-              <!-- <div class="custom-file">
+            <!-- <div class="custom-file">
                   <input
                     type="file"
                     class="custom-file-input"
@@ -112,41 +101,58 @@
                   >
                 </div> -->
 
+            <input
+              type="text"
+              class="form-control"
+              id="photo"
+              placeholder="Ingrese URL Imagen de Perfil.."
+              formControlName="photo"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formEspecialista.controls.photo.errors?.required &&
+                formEspecialista.controls.photo.touched
+              "
+            >
+              Ingrese URL
+            </small>
+
+            <select class="form-select" id="especialidad">
+              <option selected="true" disabled="disabled">
+                seleccione la Especialidad
+              </option>
+              <option value="Dermatología">Dermatología</option>
+              <option value="Ginecología y obstetricia o tocología">
+                Ginecología y obstetricia o tocología
+              </option>
+              <option value="Medicina de Urgencias">
+                Medicina de Urgencias
+              </option>
+              <option value="Oftalmología">Oftalmología</option>
+              <option value="Otorrinolaringología">Otorrinolaringología</option>
+              <option value="Traumatología">Traumatología</option>
+              <option value="Otro">Otro</option>
+            </select>
+
+            <small
+              class="invalid"
+              *ngIf="
+                formEspecialista.controls.especialidad.errors?.required &&
+                formEspecialista.controls.especialidad.touched
+              "
+            >
+              La pregunta es requerida
+            </small>
+
+            <div *ngIf="formEspecialista.get('especialidad') == 'Otro'">
               <input
                 type="text"
                 class="form-control"
-                id="photo"
+                id="especialidad"
                 placeholder="Ingrese URL Imagen de Perfil.."
-                formControlName="photo"
+                formControlName="especialidad"
               />
-              <small
-                class="invalid"
-                *ngIf="
-                  formEspecialista.controls.photo.errors?.required &&
-                  formEspecialista.controls.photo.touched
-                "
-              >
-                Ingrese URL
-              </small>
-
-              <select class="form-select" id="especialidad">
-                <option selected="true" disabled="disabled">
-                  seleccione la Especialidad
-                </option>
-                <option value="Dermatología">Dermatología</option>
-                <option value="Ginecología y obstetricia o tocología">
-                  Ginecología y obstetricia o tocología
-                </option>
-                <option value="Medicina de Urgencias">
-                  Medicina de Urgencias
-                </option>
-                <option value="Oftalmología">Oftalmología</option>
-                <option value="Otorrinolaringología">
-                  Otorrinolaringología
-                </option>
-                <option value="Traumatología">Traumatología</option>
-              </select>
-
               <small
                 class="invalid"
                 *ngIf="
@@ -154,154 +160,144 @@
                   formEspecialista.controls.especialidad.touched
                 "
               >
-                La pregunta es requerida
-              </small>
-            </form>
-          </div>
-
-          <!-- PACIENTE -->
-          <div *ngSwitchCase="'Paciente'">
-            <form [formGroup]="formPaciente" (ngSubmit)="onRegister()">
-              <input
-                type="text"
-                class="form-control"
-                id="name"
-                placeholder="Ingrese Nombre.."
-                formControlName="name"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formPaciente.controls.name.errors?.required &&
-                  formPaciente.controls.name.touched
-                "
-              >
-                Ingrese Nombre
-              </small>
-
-              <input
-                type="text"
-                class="form-control"
-                id="surname"
-                placeholder="Ingrese Apellido.."
-                formControlName="surname"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formPaciente.controls.surname.errors?.required &&
-                  formPaciente.controls.surname.touched
-                "
-              >
-                Ingrese Apellido
-              </small>
-
-              <input
-                type="number"
-                class="form-control"
-                id="age"
-                placeholder="Ingrese Edad.."
-                formControlName="age"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formPaciente.controls.age.errors?.required &&
-                  formPaciente.controls.age.touched
-                "
-              >
-                Ingrese Edad
-              </small>
-              <small
-                class="invalid"
-                *ngIf="
-                  formPaciente.controls.age.errors?.min ||
-                  (formPaciente.controls.age.errors?.max &&
-                    formPaciente.controls.age.touched)
-                "
-              >
-                Edad Inválida, Rango entre [18 - 99]
-              </small>
-
-              <input
-                type="number"
-                class="form-control"
-                id="dni"
-                placeholder="Ingrese DNI.."
-                formControlName="dni"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formPaciente.controls.dni.errors?.required &&
-                  formPaciente.controls.dni.touched
-                "
-              >
-                Ingrese DNI
-              </small>
-              <small
-                class="invalid"
-                *ngIf="
-                  formPaciente.controls.dni.errors?.maxLength &&
-                  formEspecialista.controls.dni.errors?.minLength &&
-                  formPaciente.controls.dni.touched
-                "
-              >
-                DNI Inválido
-              </small>
-
-              <input
-                type="text"
-                class="form-control"
-                id="obra_social"
-                placeholder="Ingrese Obra Social.."
-                formControlName="obra_social"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formPaciente.controls.obra_social.errors?.required &&
-                  formPaciente.controls.obra_social.touched
-                "
-              >
-                Ingrese Obra Social
-              </small>
-
-              <input
-                type="text"
-                class="form-control"
-                id="photo1"
-                placeholder="Ingrese URL Imagen de Perfil.."
-                formControlName="photo1"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formPaciente.controls.photo1.errors?.required &&
-                  formPaciente.controls.photo1.touched
-                "
-              >
                 Ingrese URL
               </small>
+            </div>
+          </form>
+        </div>
 
-              <input
-                type="text"
-                class="form-control"
-                id="photo2"
-                placeholder="Ingrese URL Imagen Secundaria.."
-                formControlName="photo2"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formPaciente.controls.photo2.errors?.required &&
-                  formPaciente.controls.photo2.touched
-                "
-              >
-                Ingrese URL
-              </small>
+        <!-- PACIENTE -->
+        <div *ngSwitchCase="'Paciente'">
+          <form [formGroup]="formPaciente" (ngSubmit)="onRegister()">
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              placeholder="Ingrese Nombre.."
+              formControlName="name"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formPaciente.controls.name.errors?.required &&
+                formPaciente.controls.name.touched
+              "
+            >
+              Ingrese Nombre
+            </small>
 
-              <!-- <div class="custom-file">
+            <input
+              type="text"
+              class="form-control"
+              id="surname"
+              placeholder="Ingrese Apellido.."
+              formControlName="surname"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formPaciente.controls.surname.errors?.required &&
+                formPaciente.controls.surname.touched
+              "
+            >
+              Ingrese Apellido
+            </small>
+
+            <input
+              type="number"
+              class="form-control"
+              id="age"
+              placeholder="Ingrese Edad.."
+              formControlName="age"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formPaciente.controls.age.errors?.required &&
+                formPaciente.controls.age.touched
+              "
+            >
+              Ingrese Edad
+            </small>
+            <small
+              class="invalid"
+              *ngIf="
+                formPaciente.controls.age.errors?.min ||
+                (formPaciente.controls.age.errors?.max &&
+                  formPaciente.controls.age.touched)
+              "
+            >
+              Edad Inválida, Rango entre [18 - 99]
+            </small>
+
+            <input
+              type="number"
+              class="form-control"
+              id="dni"
+              placeholder="Ingrese DNI.."
+              formControlName="dni"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formPaciente.controls.dni.touched
+              "
+            >
+              Ingrese DNI
+            </small>
+
+            <input
+              type="text"
+              class="form-control"
+              id="obra_social"
+              placeholder="Ingrese Obra Social.."
+              formControlName="obra_social"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formPaciente.controls.obra_social.errors?.required &&
+                formPaciente.controls.obra_social.touched
+              "
+            >
+              Ingrese Obra Social
+            </small>
+
+            <input
+              type="text"
+              class="form-control"
+              id="photo1"
+              placeholder="Ingrese URL Imagen de Perfil.."
+              formControlName="photo1"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formPaciente.controls.photo1.errors?.required &&
+                formPaciente.controls.photo1.touched
+              "
+            >
+              Ingrese URL
+            </small>
+
+            <input
+              type="text"
+              class="form-control"
+              id="photo2"
+              placeholder="Ingrese URL Imagen Secundaria.."
+              formControlName="photo2"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formPaciente.controls.photo2.errors?.required &&
+                formPaciente.controls.photo2.touched
+              "
+            >
+              Ingrese URL
+            </small>
+
+            <!-- <div class="custom-file">
                   <input
                     type="file"
                     class="custom-file-input"
@@ -324,69 +320,67 @@
                     >Ingrese Foto</label
                   >
                 </div> -->
-            </form>
-          </div>
+          </form>
         </div>
+      </div>
 
-        <!-- USERS'S DATA: email and pass -->
-        <form [formGroup]="formUser" (ngSubmit)="onRegister()">
-          <div class="card-body">
+      <!-- USERS'S DATA: email and pass -->
+      <form [formGroup]="formUser" (ngSubmit)="onRegister()">
+        <div class="card-body">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              id="email"
+              placeholder="Ingrese Correo.."
+              formControlName="email"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formUser.controls.email.errors?.required &&
+                formUser.controls.email.touched
+              "
+            >
+              Ingrese Email
+            </small>
+
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              placeholder="Ingrese Contraseña.."
+              formControlName="password"
+            />
+            <small
+              class="invalid"
+              *ngIf="
+                formUser.controls.password.errors?.required &&
+                formUser.controls.password.touched
+              "
+            >
+              Ingrese Contraseña
+            </small>
             <div class="form-group">
-              <input
-                type="text"
-                class="form-control"
-                id="email"
-                placeholder="Ingrese Correo.."
-                formControlName="email"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formUser.controls.email.errors?.required &&
-                  formUser.controls.email.touched
-                "
+              <button
+                class="btn btn-primary btn-lg btn-block"
+                type="submit"
+                class="btn btn-primary btn-block"
+                [disabled]=""
+                style="cursor: pointer"
               >
-                Ingrese Email
-              </small>
-
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                placeholder="Ingrese Contraseña.."
-                formControlName="password"
-              />
-              <small
-                class="invalid"
-                *ngIf="
-                  formUser.controls.password.errors?.required &&
-                  formUser.controls.password.touched
-                "
-              >
-                Ingrese Contraseña
-              </small>
-              <div class="form-group">
-                <button
-                  class="btn btn-primary btn-lg btn-block"
-                  type="submit"
-                  class="btn btn-primary btn-block"
-                  [disabled]=""
-                  style="cursor: pointer"
-                >
-                  Register
-                </button>
-              </div>
-              <div class="form-group mt-3">
-                <p>
-                  Do you have an account?
-                  <a routerLink="/user/login" routerLinkActive="active"
-                    >Login</a
-                  >
-                </p>
-              </div>
+                Register
+              </button>
+            </div>
+            <div class="form-group mt-3">
+              <p>
+                Do you have an account?
+                <a routerLink="/user/login" routerLinkActive="active">Login</a>
+              </p>
             </div>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
+</div>

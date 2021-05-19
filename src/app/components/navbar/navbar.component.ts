@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  public user$: Observable<any> = this.authService.afAuth.user;
+  public user$: Observable<any> = this.authService.angularFireAuth.user;
 
   constructor(private authService: AuthService) { }
 

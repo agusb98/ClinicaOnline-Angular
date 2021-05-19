@@ -13,21 +13,8 @@ export class AuthGuard implements CanActivate {
     private authService: AuthService
   ) { }
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.checkUser();
+  /* Return false if user is logged, true if not */
+  canActivate(): boolean{
+    return this.authService.isLogged;
   }
-
-  /* 
-    check if user id logged by localstore
-   */
-  checkUser(): boolean {
-    if (this.authService.isLogged) {
-      return true;
-    }
-    this.router.navigate(['user/login']);   //Redirect to login
-    return false;
-  }
-
 }

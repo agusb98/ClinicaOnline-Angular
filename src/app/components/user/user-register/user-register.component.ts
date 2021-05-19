@@ -54,7 +54,7 @@ export class UserRegisterComponent {
       'name': ['', Validators.required],
       'surname': ['', Validators.required],
       'age': ['', [Validators.required, Validators.min(18), Validators.max(99)]],
-      'dni': ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(8)]],
+      'dni': ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(8), Validators.minLength(8)]],
       'especialidad': ['', Validators.required],
       'photo': ['', Validators.required]
     });
@@ -62,7 +62,7 @@ export class UserRegisterComponent {
 
   async onRegister() {
     const { email, password } = this.formUser.value;
-
+    
      try {
       const user = await this.authService.register(email, password);
       if (user) {

@@ -30,4 +30,9 @@ export class UserLoginComponent {
     }
     catch (error) { }
   }
+
+  quickLog(){
+    this.loginForm.value.password = '12345678';
+    this.loginForm.value.email= "el.octavio.villegas@gmail.com";
+  }
 }

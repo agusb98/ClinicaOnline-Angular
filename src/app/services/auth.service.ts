@@ -12,13 +12,13 @@ export class AuthService {
   public email: string = '';
 
   constructor(
-    public afAuth: AngularFireAuth,
+    public angularFireAuth: AngularFireAuth,
     private toastrService: ToastrService
   ) { }
 
   async login(email: string, password: string) {
     try {
-      const user = await this.afAuth.signInWithEmailAndPassword(email, password);
+      const user = await this.angularFireAuth.signInWithEmailAndPassword(email, password);
       this.isLogged = true; //flag about user signin
       this.email = email;
       this.toastrService.success('Ingreso con Exito', 'Iniciar Sesión');
@@ -30,7 +30,7 @@ export class AuthService {
 
   async register(email: string, password: string) {
     try {
-      const user = await this.afAuth.createUserWithEmailAndPassword(email, password);
+      const user = await this.angularFireAuth.createUserWithEmailAndPassword(email, password);
       this.isLogged = true; //flag about user signin
       this.email = email;
       this.toastrService.success('Bienvenido!', 'Registro de Usuario');
@@ -42,7 +42,7 @@ export class AuthService {
 
   async logout() {
     try {
-      await this.afAuth.signOut();
+      await this.angularFireAuth.signOut();
       this.isLogged = false; //flag about user logout
       this.email = '';
       this.toastrService.success('Sesion Cerrada con Exito', 'Salir');
