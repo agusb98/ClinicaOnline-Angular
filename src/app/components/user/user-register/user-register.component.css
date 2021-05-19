@@ -1,0 +1,28 @@
+select {
+  background: whitesmoke;
+  border: none;
+  font-size: 14px;
+  height: 30px;
+  padding: 5px;
+  width: 250px;
+}
+
+input,
+select {
+  margin: 0.8rem;
+}
+
+small {
+  color: red;
+}
+
+select{
+  cursor: pointer;
+}
+
+.card-header{
+  left: 50;
+  position: relative;
+  width: 40%;
+  background-color: whitesmoke;
+}
