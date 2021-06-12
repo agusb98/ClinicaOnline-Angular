@@ -6,7 +6,6 @@ import { UserLogoutComponent } from './user-logout/user-logout.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 
-
 @NgModule({
   declarations: [UserLogoutComponent, UserProfileComponent],
   imports: [

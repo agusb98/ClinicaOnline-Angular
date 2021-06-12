@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent, ...canActivate(redirectUnauthorizedToLogin) },
   { path: 'user', loadChildren: () => import('./components/user/user-routing.module').then(m => m.UserRoutingModule) },
+  { path: 'admin', loadChildren: () => import('./components/admin/admin-routing.module').then(m => m.AdminRoutingModule) },
   { path: '**', component: ErrorComponent },
 ];
 

@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { canActivate, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from 'src/app/services/auth.guard';
-import { HomeComponent } from '../home/home.component';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { UserLogoutComponent } from './user-logout/user-logout.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';

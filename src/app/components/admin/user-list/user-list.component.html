@@ -1,0 +1,108 @@
+<div class="body" id="body">
+  <div class="container">
+    <h1 style="text-align: center">Listado Usuarios</h1>
+
+    <div class="col div-buttons">
+      <button class="btn btn-primary mt-2 mb-2" (click)="showPacientes()">
+        Pacientes
+      </button>
+      <button class="btn btn-primary mt-2 mb-2" (click)="showEspecialista()">
+        Especialistas
+      </button>
+      <button class="btn btn-primary mt-2 mb-2" (click)="showAdministradores()">
+        Administradores
+      </button>
+    </div>
+
+    <div *ngIf="this.onlyAdmin">
+      <table class="table table-dark mydatatable" style="text-align: left">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>DNI</th>
+            <th>Email</th>
+            <th>Foto</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody class="tbodyFilm">
+          <tr *ngFor="let user of this.listAdmins">
+            <td>{{ user.name }}</td>
+            <td>{{ user.surname }}</td>
+            <td>{{ user.age }}</td>
+            <td>{{ user.dni }}</td>
+            <td>{{ user.email }}</td>
+            <td><img src="{{ user.photo }}" class="img-principal-photo" /></td>
+            <td>{{ user.user }}</td>
+            <td *ngIf="'{{ user.status }}'">{{ user.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="this.onlyEspecialista">
+      <table class="table table-dark mydatatable" style="text-align: left">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>DNI</th>
+            <th>Email</th>
+            <th>Foto</th>
+            <th>Especialidad</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody class="tbodyFilm">
+          <tr *ngFor="let user of this.listEspecialistas">
+            <td>{{ user.name }}</td>
+            <td>{{ user.surname }}</td>
+            <td>{{ user.age }}</td>
+            <td>{{ user.dni }}</td>
+            <td>{{ user.email }}</td>
+            <td><img src="{{ user.photo }}" class="img-principal-photo" /></td>
+            <td>{{ user.especialidad }}</td>
+            <td>{{ user.user }}</td>
+            <td *ngIf="'{{ user.status }}'">{{ user.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="this.onlyPaciente">
+      <table class="table table-dark mydatatable" style="text-align: left">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>DNI</th>
+            <th>Email</th>
+            <th>Foto Principal</th>
+            <th>Foto Secundaria</th>
+            <th>Obra Social</th>
+            <th>Tipo</th>
+          </tr>
+        </thead>
+        <tbody class="tbodyFilm">
+          <tr *ngFor="let user of this.listPacientes">
+            <td>{{ user.name }}</td>
+            <td>{{ user.surname }}</td>
+            <td>{{ user.age }}</td>
+            <td>{{ user.dni }}</td>
+            <td>{{ user.email }}</td>
+            <td><img src="{{ user.photo }}" class="img-principal-photo" /></td>
+            <td><img src="{{ user.photo2 }}" class="img-principal-photo" /></td>
+            <td>{{ user.obra_social }}</td>
+            <td>{{ user.user }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

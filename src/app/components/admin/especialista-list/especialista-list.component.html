@@ -1,0 +1,39 @@
+<div class="body" id="body">
+  <div class="container">
+    <h1 style="text-align: center">Listado Especialistas</h1>
+
+    <div *ngIf="this.list">
+      <table class="table table-dark mydatatable" style="text-align: left">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>DNI</th>
+            <th>Email</th>
+            <th>Foto</th>
+            <th>Especialidad</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody class="tbodyFilm">
+          <tr *ngFor="let user of this.list">
+            <td>{{ user.name }}</td>
+            <td>{{ user.surname }}</td>
+            <td>{{ user.age }}</td>
+            <td>{{ user.dni }}</td>
+            <td>{{ user.email }}</td>
+            <td><img src="{{ user.photo }}" class="img-principal-photo" /></td>
+            <td>{{ user.especialidad }}</td>
+            <td>{{ user.user }}</td>
+            <td>
+                <button *ngIf="user.status" class="btn btn-danger" (click)="setStatus(user)">Desabilitar</button>
+                <button  *ngIf="!user.status" class="btn btn-success" (click)="setStatus(user)">Habilitar</button>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

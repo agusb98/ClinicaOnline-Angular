@@ -1,9 +1,12 @@
 export class Especialista {
+    id: string;
     name: string;
     surname: string;
     age: number;
     dni: number;
-    especialidad: string;
     photo: string;
+    especialidad: string;
     email: string;
+    user: string;
+    status: boolean;
 }

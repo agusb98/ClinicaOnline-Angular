@@ -1,8 +1,18 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" *ngIf="user$">
     <div class="container">
       <div class="container-fluid">
         <a class="navbar-brand" routerLink="/home" routerLinkActive="active">
           <i class="fa fa-align-justify"></i> Home</a
+        >
+
+        <a *ngIf="user$.user == 'Administrador'" class="navbar-brand" routerLink="/user/list" routerLinkActive="active">
+          <i class="fa config-justify"></i> Admin</a
+        >
+        <a *ngIf="user$.user == 'Paciente'" class="navbar-brand" routerLink="/user/list" routerLinkActive="active">
+          <i class="fa config-justify"></i> Turnos</a
+        >
+        <a *ngIf="user$.user == 'Especialista'" class="navbar-brand" routerLink="/user/list" routerLinkActive="active">
+          <i class="fa config-justify"></i> Turnos</a
         >
         <button
           class="navbar-toggler"
@@ -17,7 +27,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ml-auto">
-            <ul *ngIf="user$ | async as user$; else login">
+            <ul *ngIf="this.user$; else login">
               <ul class="navbar-nav ml-auto">
                 <a
                   class="nav-link"

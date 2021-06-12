@@ -26,3 +26,7 @@ select{
   width: 40%;
   background-color: whitesmoke;
 }
+
+#input-photo{
+  left: 0.8rem;
+}

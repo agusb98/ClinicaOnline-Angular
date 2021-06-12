@@ -17,7 +17,6 @@ export class UserLogoutComponent {
   async onLogout() {
     try { 
       await this.authService.logout(); 
-      localStorage.setItem('email', '');  //clean localStore
       this.router.navigate(['user/login']);
     }
     catch (error) { }

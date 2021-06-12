@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+    background-image: url("https://www.visualpoint.com.co/wp-content/uploads/2017/05/saludatencionprincipal.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+    background-size:cover;
+}

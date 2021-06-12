@@ -17,20 +17,27 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { UserLoginComponent } from './components/user/user-login/user-login.component';
 import { UserRegisterComponent } from './components/user/user-register/user-register.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { MisTurnosComponent } from './components/turno/mis-turnos/mis-turnos.component';
+import { CommonModule } from '@angular/common';
+import { UserModule } from './components/user/user.module';
+import { EspecialistaListComponent } from './components/admin/especialista-list/especialista-list.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserLoginComponent, //Ver como dejarlo en user component
-    UserRegisterComponent, NavbarComponent //Ver como dejarlo en user component
+    UserLoginComponent, 
+    UserRegisterComponent, 
+    NavbarComponent, MisTurnosComponent, EspecialistaListComponent
   ],
   imports: [
+    UserModule,
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    FormsModule,  //Ver como dejarlo en user component
-    ReactiveFormsModule,  //Ver como dejarlo en user component
+    FormsModule, 
+    ReactiveFormsModule, 
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     ToastrModule.forRoot({
