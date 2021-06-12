@@ -5,8 +5,11 @@
           <i class="fa fa-align-justify"></i> Home</a
         >
 
-        <a *ngIf="user$.user == 'Administrador'" class="navbar-brand" routerLink="/user/list" routerLinkActive="active">
-          <i class="fa config-justify"></i> Admin</a
+        <a *ngIf="user$.user == 'Administrador'" class="navbar-brand" routerLink="/admin/users/esp" routerLinkActive="active">
+          <i class="fa config-justify"></i> Users</a
+        >
+        <a *ngIf="user$.user == 'Administrador'" class="navbar-brand" routerLink="/admin/add" routerLinkActive="active">
+          <i class="fa config-justify"></i> Register Admin</a
         >
         <a *ngIf="user$.user == 'Paciente'" class="navbar-brand" routerLink="/user/list" routerLinkActive="active">
           <i class="fa config-justify"></i> Turnos</a

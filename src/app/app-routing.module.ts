@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { canActivate, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { RouterModule, Routes } from '@angular/router';
-import { ErrorComponent } from './components/error/error.component';
-import { HomeComponent } from './components/home/home.component';
+import { ErrorComponent } from './pages/error/error.component';
+import { HomeComponent } from './pages/home/home.component';
 
 //   Send unauthorized users to login
 const redirectUnauthorizedToLogin = () =>

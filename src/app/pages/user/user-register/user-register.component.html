@@ -6,9 +6,13 @@
       <!-- Cambiar select por Buttons -->
 
       <select id="select-kynd" [(ngModel)]="kyndUser">
-        <option [disabled]="!this.isAdmin" value="Administrador">Administrador</option>
+        <option [disabled]="!this.isAdmin" value="Administrador">
+          Administrador
+        </option>
         <option [disabled]="this.isAdmin" value="Paciente">Paciente</option>
-        <option [disabled]="this.isAdmin" value="Especialista">Especialista</option>
+        <option [disabled]="this.isAdmin" value="Especialista">
+          Especialista
+        </option>
       </select>
 
       <div [ngSwitch]="this.kyndUser">
@@ -39,10 +43,11 @@
               placeholder="Ingrese Apellido.."
               formControlName="surname"
             />
-            <div *ngFor="let error of errorMessages.name">
+            <div *ngFor="let error of errorMessages.surname">
               <ng-container
                 *ngIf="
-                  name.hasError(error.type) && (name.dirty || name.touched)
+                  surname.hasError(error.type) &&
+                  (surname.dirty || surname.touched)
                 "
               >
                 <small class="error-message">{{ error.message }}</small>
@@ -56,12 +61,9 @@
               placeholder="Ingrese Edad.."
               formControlName="age"
             />
-            <div *ngFor="let error of errorMessages.surname">
+            <div *ngFor="let error of errorMessages.age">
               <ng-container
-                *ngIf="
-                  surname.hasError(error.type) &&
-                  (surname.dirty || surname.touched)
-                "
+                *ngIf="age.hasError(error.type) && (age.dirty || age.touched)"
               >
                 <small class="error-message">{{ error.message }}</small>
               </ng-container>

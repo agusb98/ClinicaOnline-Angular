@@ -42,6 +42,18 @@ export class AuthService {
     if ('carlitos@gmail.com' == email && 'acer1234' && password) {
       return true;
     }
+    if ('admin2@gmail.com' == email && 'acer1234' && password) {
+      return true;
+    }
+    if ('admin3@gmail.com' == email && 'acer1234' && password) {
+      return true;
+    }
+    if ('admin4@gmail.com' == email && 'acer1234' && password) {
+      return true;
+    }
+    if ('admin5@gmail.com' == email && 'acer1234' && password) {
+      return true;
+    }
     return false;
   }
 

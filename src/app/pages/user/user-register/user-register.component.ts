@@ -20,9 +20,9 @@ export class UserRegisterComponent implements OnInit {
   @Input() isAdmin = false;
 
   public kyndUser = 'Paciente';
-  public formAdmin: FormGroup = this.formBuilder.group({});
-  public formPaciente: FormGroup = this.formBuilder.group({});
-  public formEspecialista: FormGroup = this.formBuilder.group({});
+  public formAdmin: FormGroup;
+  public formPaciente: FormGroup;
+  public formEspecialista: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,6 +36,8 @@ export class UserRegisterComponent implements OnInit {
     this.formAdmin = this.createValidatorsAdmin(this.formBuilder);
     this.formPaciente = this.createValidatorsPaciente(this.formBuilder);
     this.formEspecialista = this.createValidatorsEspecialista(this.formBuilder);
+
+    if (this.isAdmin) { this.kyndUser = 'Administrador'; }
   }
 
   createValidatorsAdmin(formBuilder: FormBuilder): FormGroup {
@@ -77,7 +79,7 @@ export class UserRegisterComponent implements OnInit {
     });
   }
 
-  get name() {    
+  get name() {
     switch (this.kyndUser) {
       case 'Paciente':
         return this.formPaciente.get('name');
@@ -198,11 +200,9 @@ export class UserRegisterComponent implements OnInit {
   }
 
   cleanForm() {
-    this.formAdmin.reset();
-    this.formEspecialista.reset();
-    this.formAdmin.reset();
-    this.photo = null;
-    this.photo2 = null;
+    this.formAdmin = this.createValidatorsAdmin(this.formBuilder);
+    this.formPaciente = this.createValidatorsPaciente(this.formBuilder);
+    this.formEspecialista = this.createValidatorsEspecialista(this.formBuilder);
   }
 
   validPhoto(photo: any) {
@@ -218,8 +218,6 @@ export class UserRegisterComponent implements OnInit {
 
       const paciente = this.formPaciente.value as Paciente;
       await this.userService.add(paciente, this.photo, this.photo2);  //Save Paciente
-
-      this.cleanForm();
       this.router.navigate(['user/login']);
     }
   }
@@ -234,8 +232,6 @@ export class UserRegisterComponent implements OnInit {
 
       await this.userService.add(admin, this.photo);  //Save Paciente
       this.cleanForm();
-    
-      this.router.navigate(['user/login']);
     }
   }
 
@@ -247,8 +243,6 @@ export class UserRegisterComponent implements OnInit {
 
       const espe = this.formEspecialista.value as Especialista;
       await this.userService.add(espe, this.photo);  //Save Paciente
-
-      this.cleanForm();
       this.router.navigate(['user/login']);
     }
   }
