@@ -5,6 +5,7 @@ import { Admin } from 'src/app/models/admin';
 import { Especialista } from 'src/app/models/especialista';
 import { Paciente } from 'src/app/models/paciente';
 import { AuthService } from 'src/app/services/auth.service';
+import { EspecialidadService } from 'src/app/services/especialidad.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -18,6 +19,7 @@ export class UserRegisterComponent implements OnInit {
   photo2: any = null;
 
   @Input() isAdmin = false;
+  flagEspecialidad: boolean = false;
 
   public kyndUser = 'Paciente';
   public formAdmin: FormGroup;
@@ -28,8 +30,13 @@ export class UserRegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
+    private espService: EspecialidadService,
     private router: Router,
   ) {
+  }
+
+  setUser(user: string) {
+    this.kyndUser = user;
   }
 
   ngOnInit(): void {
@@ -150,7 +157,11 @@ export class UserRegisterComponent implements OnInit {
   }
 
   get especialidad() {
-    return this.formPaciente.get('especialidad');
+    return this.formEspecialista.get('especialidad');
+  }
+
+  booleanEspecialidad() {
+    this.flagEspecialidad = true;
   }
 
   public errorMessages = {
@@ -241,8 +252,11 @@ export class UserRegisterComponent implements OnInit {
       await this.authService.register(email, password);   //Save user
       this.formPaciente.removeControl('password');
 
+      const { especialidad } = this.formEspecialista.value;
+      this.checkEspecialidad(especialidad);
+
       const espe = this.formEspecialista.value as Especialista;
-      await this.userService.add(espe, this.photo);  //Save Paciente
+      await this.userService.add(espe, this.photo);  //Save Especialista
       this.router.navigate(['user/login']);
     }
   }
@@ -265,5 +279,22 @@ export class UserRegisterComponent implements OnInit {
       }
     }
     catch (error) { }
+  }
+
+  checkEspecialidad(name: string) {
+    let flagEsp = false;
+
+    this.espService.getAll().valueChanges().subscribe((data) => {
+      data.forEach(esp => {
+        if (esp.name == name) {
+          flagEsp = true;
+        }
+      });
+    })
+
+    //If flag false, there is no especialidad with that name in firebase
+    if (!flagEsp) {
+      this.espService.add(name);
+    }
   }
 }

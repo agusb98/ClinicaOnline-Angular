@@ -1,483 +1,520 @@
 <div class="container p-4 text-center row mx-auto card text-center">
+  <div class="img-kynd-user">
+    <img
+      class="container-img-admin"
+      src="/assets/img/admin-register.png"
+      *ngIf="kyndUser == 'Administrador'"
+    />
+    <img
+      class="container-img-especialista"
+      src="/assets/img/especialista-register.png"
+      *ngIf="kyndUser == 'Especialista'"
+    />
+    <img
+      class="container-img-paciente"
+      src="/assets/img/paciente-register.png"
+      *ngIf="kyndUser == 'Paciente'"
+    />
+  </div>
   <div class="card-header">
-    <div>
-      <h3>Registro de {{ this.kyndUser }}</h3>
+    <h3>Registro de {{ this.kyndUser }}</h3>
 
-      <!-- Cambiar select por Buttons -->
+    <!-- Cambiar select por Buttons -->
 
-      <select id="select-kynd" [(ngModel)]="kyndUser">
-        <option [disabled]="!this.isAdmin" value="Administrador">
-          Administrador
-        </option>
-        <option [disabled]="this.isAdmin" value="Paciente">Paciente</option>
-        <option [disabled]="this.isAdmin" value="Especialista">
-          Especialista
-        </option>
-      </select>
+    <div class="col div-buttons">
+      <button
+        [disabled]="this.isAdmin"
+        id="btn-user"
+        class="btn btn-primary mt-2 mb-2"
+        (click)="setUser('Paciente')"
+      >
+        Paciente
+      </button>
+      <button
+        [disabled]="this.isAdmin"
+        id="btn-user"
+        class="btn btn-primary mt-2 mb-2"
+        (click)="setUser('Especialista')"
+      >
+        Especialista
+      </button>
+      <button
+        [disabled]="!this.isAdmin"
+        id="btn-user"
+        class="btn btn-primary mt-2 mb-2"
+        (click)="setUser('Administrador')"
+      >
+        Admin
+      </button>
+    </div>
 
-      <div [ngSwitch]="this.kyndUser">
-        <!-- ADMIN -->
-        <div *ngSwitchCase="'Administrador'">
-          <form [formGroup]="formAdmin" (ngSubmit)="onRegister()">
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              placeholder="Ingrese Nombre.."
-              formControlName="name"
-            />
-            <small
-              class="invalid"
-              *ngIf="
-                formAdmin.controls.name.errors?.required &&
-                formAdmin.controls.name.touched
-              "
-            >
-              Ingrese Nombre
-            </small>
-
-            <input
-              type="text"
-              class="form-control"
-              id="surname"
-              placeholder="Ingrese Apellido.."
-              formControlName="surname"
-            />
-            <div *ngFor="let error of errorMessages.surname">
-              <ng-container
-                *ngIf="
-                  surname.hasError(error.type) &&
-                  (surname.dirty || surname.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <input
-              type="number"
-              class="form-control"
-              id="age"
-              placeholder="Ingrese Edad.."
-              formControlName="age"
-            />
-            <div *ngFor="let error of errorMessages.age">
-              <ng-container
-                *ngIf="age.hasError(error.type) && (age.dirty || age.touched)"
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <input
-              type="number"
-              class="form-control"
-              id="dni"
-              placeholder="Ingrese DNI.."
-              formControlName="dni"
-            />
-            <div *ngFor="let error of errorMessages.dni">
-              <ng-container
-                *ngIf="dni.hasError(error.type) && (dni.dirty || dni.touched)"
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <div class="input-group mb-3" id="input-photo">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupFileAddon01"
-                  >Foto</span
-                >
-              </div>
-              <div class="custom-file">
-                <input
-                  type="file"
-                  (change)="onUpload($event, 1)"
-                  class="custom-file-input"
-                  aria-describedby="inputGroupFileAddon01"
-                />
-                <label class="custom-file-label" for="inputGroupFile01"
-                  >Foto Perfil</label
-                >
-              </div>
-            </div>
-
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              placeholder="Ingrese Correo.."
-              formControlName="email"
-            />
-            <div *ngFor="let error of errorMessages.email">
-              <ng-container
-                *ngIf="
-                  email.hasError(error.type) && (email.dirty || email.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              placeholder="Ingrese Contraseña.."
-              formControlName="password"
-            />
-            <div *ngFor="let error of errorMessages.password">
-              <ng-container
-                *ngIf="
-                  password.hasError(error.type) &&
-                  (password.dirty || password.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-          </form>
-        </div>
-
-        <!-- ESPECIALISTA -->
-        <div *ngSwitchCase="'Especialista'">
-          <form [formGroup]="formEspecialista" (ngSubmit)="onRegister()">
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              placeholder="Ingrese Nombre.."
-              formControlName="name"
-            />
-            <div *ngFor="let error of errorMessages.name">
-              <ng-container
-                *ngIf="
-                  name.hasError(error.type) && (name.dirty || name.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <input
-              type="text"
-              class="form-control"
-              id="surname"
-              placeholder="Ingrese Apellido.."
-              formControlName="surname"
-            />
-            <div *ngFor="let error of errorMessages.surname">
-              <ng-container
-                *ngIf="
-                  surname.hasError(error.type) &&
-                  (surname.dirty || surname.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <input
-              type="number"
-              class="form-control"
-              id="age"
-              placeholder="Ingrese Edad.."
-              formControlName="age"
-            />
-            <div *ngFor="let error of errorMessages.age">
-              <ng-container
-                *ngIf="age.hasError(error.type) && (age.dirty || age.touched)"
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <input
-              type="number"
-              class="form-control"
-              id="dni"
-              placeholder="Ingrese DNI.."
-              formControlName="dni"
-            />
-            <div *ngFor="let error of errorMessages.dni">
-              <ng-container
-                *ngIf="dni.hasError(error.type) && (dni.dirty || dni.touched)"
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <div class="input-group mb-3" id="input-photo">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupFileAddon01"
-                  >Foto</span
-                >
-              </div>
-              <div class="custom-file">
-                <input
-                  type="file"
-                  (change)="onUpload($event, 1)"
-                  class="custom-file-input"
-                  aria-describedby="inputGroupFileAddon01"
-                />
-                <label class="custom-file-label" for="inputGroupFile01"
-                  >Foto Perfil</label
-                >
-              </div>
-            </div>
-
-            <select
-              class="form-select"
-              id="especialidad"
-              formControlName="especialidad"
-            >
-              <option selected="true" disabled="disabled">
-                seleccione la Especialidad
-              </option>
-              <option value="Dermatología">Dermatología</option>
-              <option value="Ginecología y obstetricia o tocología">
-                Ginecología y obstetricia o tocología
-              </option>
-              <option value="Medicina de Urgencias">
-                Medicina de Urgencias
-              </option>
-              <option value="Oftalmología">Oftalmología</option>
-              <option value="Otorrinolaringología">Otorrinolaringología</option>
-              <option value="Traumatología">Traumatología</option>
-              <option value="Otro">Otro</option>
-            </select>
-
-            <!-- <div *ngFor="let error of errorMessages.especialidad">
-              <ng-container
-                *ngIf="especialidad.hasError(error.type) && (especialidad.dirty || especialidad.touched)"
-              >
-                <small class="error-message">{{error.message}}</small>
-              </ng-container>
-            </div> -->
-
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              placeholder="Ingrese Correo.."
-              formControlName="email"
-            />
-            <div *ngFor="let error of errorMessages.email">
-              <ng-container
-                *ngIf="
-                  email.hasError(error.type) && (email.dirty || email.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              placeholder="Ingrese Contraseña.."
-              formControlName="password"
-            />
-            <div *ngFor="let error of errorMessages.password">
-              <ng-container
-                *ngIf="
-                  password.hasError(error.type) &&
-                  (password.dirty || password.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-          </form>
-        </div>
-
-        <!-- PACIENTE -->
-        <div *ngSwitchCase="'Paciente'">
-          <form [formGroup]="formPaciente" (ngSubmit)="onRegister()">
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              placeholder="Ingrese Nombre.."
-              formControlName="name"
-            />
-            <div *ngFor="let error of errorMessages.name">
-              <ng-container
-                *ngIf="
-                  name.hasError(error.type) && (name.dirty || name.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <input
-              type="text"
-              class="form-control"
-              id="surname"
-              placeholder="Ingrese Apellido.."
-              formControlName="surname"
-            />
-            <div *ngFor="let error of errorMessages.surname">
-              <ng-container
-                *ngIf="
-                  surname.hasError(error.type) &&
-                  (surname.dirty || surname.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <input
-              type="number"
-              class="form-control"
-              id="age"
-              placeholder="Ingrese Edad.."
-              formControlName="age"
-            />
-            <div *ngFor="let error of errorMessages.age">
-              <ng-container
-                *ngIf="age.hasError(error.type) && (age.dirty || age.touched)"
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <input
-              type="number"
-              class="form-control"
-              id="dni"
-              placeholder="Ingrese DNI.."
-              formControlName="dni"
-            />
-            <div *ngFor="let error of errorMessages.dni">
-              <ng-container
-                *ngIf="dni.hasError(error.type) && (dni.dirty || dni.touched)"
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <div class="input-group mb-3" id="input-photo">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupFileAddon01"
-                  >Foto</span
-                >
-              </div>
-              <div class="custom-file">
-                <input
-                  type="file"
-                  (change)="onUpload($event, 1)"
-                  class="custom-file-input"
-                  aria-describedby="inputGroupFileAddon01"
-                />
-                <label class="custom-file-label" for="inputGroupFile01"
-                  >Foto Principal</label
-                >
-              </div>
-            </div>
-
-            <div class="input-group mb-3" id="input-photo">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupFileAddon01"
-                  >Foto</span
-                >
-              </div>
-              <div class="custom-file">
-                <input
-                  type="file"
-                  (change)="onUpload($event, 2)"
-                  class="custom-file-input"
-                  aria-describedby="inputGroupFileAddon01"
-                />
-                <label class="custom-file-label" for="inputGroupFile01"
-                  >Foto Secundaria</label
-                >
-              </div>
-            </div>
-
-            <input
-              type="text"
-              class="form-control"
-              id="obra_social"
-              placeholder="Ingrese Obra Social.."
-              formControlName="obra_social"
-            />
-            <div *ngFor="let error of errorMessages.obra_social">
-              <ng-container
-                *ngIf="
-                  obra_social.hasError(error.type) &&
-                  (obra_social.dirty || obra_social.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              placeholder="Ingrese Correo.."
-              formControlName="email"
-            />
-            <div *ngFor="let error of errorMessages.email">
-              <ng-container
-                *ngIf="
-                  email.hasError(error.type) && (email.dirty || email.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              placeholder="Ingrese Contraseña.."
-              formControlName="password"
-            />
-            <div *ngFor="let error of errorMessages.password">
-              <ng-container
-                *ngIf="
-                  password.hasError(error.type) &&
-                  (password.dirty || password.touched)
-                "
-              >
-                <small class="error-message">{{ error.message }}</small>
-              </ng-container>
-            </div>
-          </form>
-        </div>
-
-        <div class="form-group">
-          <button
-            class="btn btn-primary btn-lg btn-block"
-            type="submit"
-            class="btn btn-primary btn-block"
-            style="cursor: pointer"
-            (click)="onRegister()"
-            [disabled]="
-              (formAdmin.invalid && this.kyndUser == 'Administrador') ||
-              (formPaciente.invalid && this.kyndUser == 'Paciente') ||
-              (formEspecialista.invalid && this.kyndUser == 'Especialista') ||
-              this.photo == null ||
-              (this.photo2 == null && this.kyndUser == 'Paciente')
+    <div [ngSwitch]="this.kyndUser">
+      <!-- ADMIN -->
+      <div *ngSwitchCase="'Administrador'">
+        <form [formGroup]="formAdmin" (ngSubmit)="onRegister()">
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            placeholder="Ingrese Nombre.."
+            formControlName="name"
+          />
+          <small
+            class="invalid"
+            *ngIf="
+              formAdmin.controls.name.errors?.required &&
+              formAdmin.controls.name.touched
             "
           >
-            Register
-          </button>
-        </div>
+            Ingrese Nombre
+          </small>
 
-        <div class="form-group mt-3">
-          <p>
-            Do you have an account?
-            <a routerLink="/user/login" routerLinkActive="active">Login</a>
-          </p>
-        </div>
+          <input
+            type="text"
+            class="form-control"
+            id="surname"
+            placeholder="Ingrese Apellido.."
+            formControlName="surname"
+          />
+          <div *ngFor="let error of errorMessages.surname">
+            <ng-container
+              *ngIf="
+                surname.hasError(error.type) &&
+                (surname.dirty || surname.touched)
+              "
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            type="number"
+            class="form-control"
+            id="age"
+            placeholder="Ingrese Edad.."
+            formControlName="age"
+          />
+          <div *ngFor="let error of errorMessages.age">
+            <ng-container
+              *ngIf="age.hasError(error.type) && (age.dirty || age.touched)"
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            type="number"
+            class="form-control"
+            id="dni"
+            placeholder="Ingrese DNI.."
+            formControlName="dni"
+          />
+          <div *ngFor="let error of errorMessages.dni">
+            <ng-container
+              *ngIf="dni.hasError(error.type) && (dni.dirty || dni.touched)"
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <div class="input-group mb-3" id="input-photo">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupFileAddon01"
+                >Foto</span
+              >
+            </div>
+            <div class="custom-file">
+              <input
+                type="file"
+                (change)="onUpload($event, 1)"
+                class="custom-file-input"
+                aria-describedby="inputGroupFileAddon01"
+              />
+              <label class="custom-file-label" for="inputGroupFile01"
+                >Foto Perfil</label
+              >
+            </div>
+          </div>
+
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="Ingrese Correo.."
+            formControlName="email"
+          />
+          <div *ngFor="let error of errorMessages.email">
+            <ng-container
+              *ngIf="
+                email.hasError(error.type) && (email.dirty || email.touched)
+              "
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="Ingrese Contraseña.."
+            formControlName="password"
+          />
+          <div *ngFor="let error of errorMessages.password">
+            <ng-container
+              *ngIf="
+                password.hasError(error.type) &&
+                (password.dirty || password.touched)
+              "
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+        </form>
+      </div>
+
+      <!-- ESPECIALISTA -->
+      <div *ngSwitchCase="'Especialista'">
+        <form [formGroup]="formEspecialista" (ngSubmit)="onRegister()">
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            placeholder="Ingrese Nombre.."
+            formControlName="name"
+          />
+          <div *ngFor="let error of errorMessages.name">
+            <ng-container
+              *ngIf="name.hasError(error.type) && (name.dirty || name.touched)"
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            type="text"
+            class="form-control"
+            id="surname"
+            placeholder="Ingrese Apellido.."
+            formControlName="surname"
+          />
+          <div *ngFor="let error of errorMessages.surname">
+            <ng-container
+              *ngIf="
+                surname.hasError(error.type) &&
+                (surname.dirty || surname.touched)
+              "
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            type="number"
+            class="form-control"
+            id="age"
+            placeholder="Ingrese Edad.."
+            formControlName="age"
+          />
+          <div *ngFor="let error of errorMessages.age">
+            <ng-container
+              *ngIf="age.hasError(error.type) && (age.dirty || age.touched)"
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            type="number"
+            class="form-control"
+            id="dni"
+            placeholder="Ingrese DNI.."
+            formControlName="dni"
+          />
+          <div *ngFor="let error of errorMessages.dni">
+            <ng-container
+              *ngIf="dni.hasError(error.type) && (dni.dirty || dni.touched)"
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <div class="input-group mb-3" id="input-photo">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupFileAddon01"
+                >Foto</span
+              >
+            </div>
+            <div class="custom-file">
+              <input
+                type="file"
+                (change)="onUpload($event, 1)"
+                class="custom-file-input"
+                aria-describedby="inputGroupFileAddon01"
+              />
+              <label class="custom-file-label" for="inputGroupFile01"
+                >Foto Perfil</label
+              >
+            </div>
+          </div>
+
+          <label>Seleccione Especialidad</label>
+          <select
+            class="form-select"
+            id="especialidad"
+            formControlName="especialidad"
+          >
+            <option value="Dermatología">Dermatología</option>
+            <option value="Ginecología y obstetricia o tocología">
+              Ginecología y obstetricia o tocología
+            </option>
+            <option value="Medicina de Urgencias">Medicina de Urgencias</option>
+            <option value="Oftalmología">Oftalmología</option>
+            <option value="Otorrinolaringología">Otorrinolaringología</option>
+            <option value="Traumatología">Traumatología</option>
+            <option value="Otro">Otro</option>
+          </select>
+
+          <div *ngFor="let error of errorMessages.especialidad">
+            <ng-container
+              *ngIf="
+                especialidad.hasError(error.type) &&
+                (especialidad.dirty || especialidad.touched)"
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            *ngIf="especialidad.value === 'Otro' || this.flagEspecialidad"
+            type="especialidad"
+            class="form-control"
+            id="especialidad"
+            placeholder="Ingrese Especialidad.."
+            formControlName="especialidad"
+            (click)=booleanEspecialidad()
+          />
+
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="Ingrese Correo.."
+            formControlName="email"
+          />
+          <div *ngFor="let error of errorMessages.email">
+            <ng-container
+              *ngIf="
+                email.hasError(error.type) && (email.dirty || email.touched)
+              "
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="Ingrese Contraseña.."
+            formControlName="password"
+          />
+          <div *ngFor="let error of errorMessages.password">
+            <ng-container
+              *ngIf="
+                password.hasError(error.type) &&
+                (password.dirty || password.touched)
+              "
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+        </form>
+      </div>
+
+      <!-- PACIENTE -->
+      <div *ngSwitchCase="'Paciente'">
+        <form [formGroup]="formPaciente" (ngSubmit)="onRegister()">
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            placeholder="Ingrese Nombre.."
+            formControlName="name"
+          />
+          <div *ngFor="let error of errorMessages.name">
+            <ng-container
+              *ngIf="name.hasError(error.type) && (name.dirty || name.touched)"
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            type="text"
+            class="form-control"
+            id="surname"
+            placeholder="Ingrese Apellido.."
+            formControlName="surname"
+          />
+          <div *ngFor="let error of errorMessages.surname">
+            <ng-container
+              *ngIf="
+                surname.hasError(error.type) &&
+                (surname.dirty || surname.touched)
+              "
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            type="number"
+            class="form-control"
+            id="age"
+            placeholder="Ingrese Edad.."
+            formControlName="age"
+          />
+          <div *ngFor="let error of errorMessages.age">
+            <ng-container
+              *ngIf="age.hasError(error.type) && (age.dirty || age.touched)"
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            type="number"
+            class="form-control"
+            id="dni"
+            placeholder="Ingrese DNI.."
+            formControlName="dni"
+          />
+          <div *ngFor="let error of errorMessages.dni">
+            <ng-container
+              *ngIf="dni.hasError(error.type) && (dni.dirty || dni.touched)"
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <div class="input-group mb-3" id="input-photo">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupFileAddon01"
+                >Foto</span
+              >
+            </div>
+            <div class="custom-file">
+              <input
+                type="file"
+                (change)="onUpload($event, 1)"
+                class="custom-file-input"
+                aria-describedby="inputGroupFileAddon01"
+              />
+              <label class="custom-file-label" for="inputGroupFile01"
+                >Foto Principal</label
+              >
+            </div>
+          </div>
+
+          <div class="input-group mb-3" id="input-photo">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupFileAddon01"
+                >Foto</span
+              >
+            </div>
+            <div class="custom-file">
+              <input
+                type="file"
+                (change)="onUpload($event, 2)"
+                class="custom-file-input"
+                aria-describedby="inputGroupFileAddon01"
+              />
+              <label class="custom-file-label" for="inputGroupFile01"
+                >Foto Secundaria</label
+              >
+            </div>
+          </div>
+
+          <input
+            type="text"
+            class="form-control"
+            id="obra_social"
+            placeholder="Ingrese Obra Social.."
+            formControlName="obra_social"
+          />
+          <div *ngFor="let error of errorMessages.obra_social">
+            <ng-container
+              *ngIf="
+                obra_social.hasError(error.type) &&
+                (obra_social.dirty || obra_social.touched)
+              "
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="Ingrese Correo.."
+            formControlName="email"
+          />
+          <div *ngFor="let error of errorMessages.email">
+            <ng-container
+              *ngIf="
+                email.hasError(error.type) && (email.dirty || email.touched)
+              "
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="Ingrese Contraseña.."
+            formControlName="password"
+          />
+          <div *ngFor="let error of errorMessages.password">
+            <ng-container
+              *ngIf="
+                password.hasError(error.type) &&
+                (password.dirty || password.touched)
+              "
+            >
+              <small class="error-message">{{ error.message }}</small>
+            </ng-container>
+          </div>
+        </form>
+      </div>
+
+      <div class="form-group">
+        <button
+          id="btn-register"
+          class="btn btn-primary btn-lg btn-block"
+          type="submit"
+          class="btn btn-primary btn-block"
+          style="cursor: pointer"
+          (click)="onRegister()"
+          [disabled]="
+            (formAdmin.invalid && this.kyndUser == 'Administrador') ||
+            (formPaciente.invalid && this.kyndUser == 'Paciente') ||
+            (formEspecialista.invalid && this.kyndUser == 'Especialista') ||
+            this.photo == null ||
+            (this.photo2 == null && this.kyndUser == 'Paciente')
+          "
+        >
+          Register
+        </button>
+      </div>
+
+      <div *ngIf="!isAdmin" class="form-group mt-3">
+        <p>
+          Do you have an account?
+          <a routerLink="/user/login" routerLinkActive="active">Login</a>
+        </p>
       </div>
     </div>
   </div>

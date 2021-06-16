@@ -14,7 +14,6 @@ import { Especialista } from '../models/especialista';
 })
 export class UserService {
   pathOfCollection = '/clinica-user';
-  public user: any;
 
   constructor(
     private toastr: ToastrService,
@@ -54,9 +53,6 @@ export class UserService {
         });
       }
       setTimeout(() => {
-        console.log(data);
-        console.log(photo);
-
         return this.db.collection(this.pathOfCollection).add({ ...data });  //  llaves es objeto, 3 puntitos es dinamico
       }, 8000);
     }
@@ -71,27 +67,11 @@ export class UserService {
     catch (error) { this.toastr.error('Error at the moment to get users..', 'Data users'); }
   }
 
-  getByKyndUser(user: string) {
+  getOne(email: string) {
     try {
-      return this.db.collection<any>(this.pathOfCollection, ref => ref.where('user', '==', user));
+      return this.db.collection<any>(this.pathOfCollection, ref => ref.where('email', '==', email));
     }
-    catch (error) { this.toastr.error(error, 'Data user'); }
-  }
-
-  async getByEmail(email: string) {
-    return await this.db.collection(this.pathOfCollection, ref => ref.where("email", "==", email).limit(1));
-  }
-
-  async isEspecialista(email: string) {
-    console.log(this.user);
-  }
-
-  async isAdmin(email: string) {
-    console.log(this.user);
-  }
-
-  async isPaciente() {
-    console.log(this.user);
+    catch (error) { this.toastr.error('Error at the moment to get users..', 'Data users'); }
   }
 
   async uploadPhoto(photo, id: string) {
@@ -111,10 +91,12 @@ export class UserService {
 
   async update(data: Especialista) {
     try {
-      await this.db.collection(this.pathOfCollection).doc(data.id).delete();
-      await this.db.collection(this.pathOfCollection).doc(data.id).set({ ...data });
-      this.toastr.success('Datos Actualizados con Exito', 'Update');
-    } 
+      await this.db.collection(this.pathOfCollection).doc(data.id).delete().then(async () => {
+        await this.db.collection(this.pathOfCollection).doc(data.id).set({ ...data }).then(() => {
+          this.toastr.success('Datos Actualizados con Exito', 'Update');
+        });
+      });
+    }
     catch (error) { this.toastr.error(error, 'Update'); }
   }
 }

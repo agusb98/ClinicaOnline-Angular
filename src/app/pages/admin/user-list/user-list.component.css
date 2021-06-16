@@ -3,6 +3,9 @@
     height: 5rem;
 }
 
-button{
-    margin-right: 13.85rem;
+.btn-user{
+    margin-left: 11rem;
+}
+.btn-user-add{
+    margin-left: 3.2rem;
 }

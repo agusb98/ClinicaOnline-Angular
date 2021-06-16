@@ -1,0 +1,107 @@
+<div
+  class="container p-4 text-center row mx-auto card text-center"
+  *ngIf="user"
+>
+  <div class="container-select-esp">
+    <div *ngIf="this.listEspecialistas">
+      <form [formGroup]="formFilter" (ngSubmit)="onFilter()">
+        <input
+          type="text"
+          formControlName="filter"
+          class="form-control filter"
+          placeholder="Buscar.."
+        />
+      </form>
+
+      <button
+        id="btn-filter"
+        class="btn btn-primary btn-lg btn-block"
+        type="submit"
+        class="btn btn-primary btn-block"
+        style="cursor: pointer"
+        (click)="onFilter()"
+      >
+        Buscar
+      </button>
+
+      <table class="table table-dark mydatatable">
+        <thead>
+          <tr>
+            <th>Especialista</th>
+            <th>Especialidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of this.filterEspecialistas">
+            <td (click)="clickEspecialista(user)">
+              {{ user.name }} {{ user.surname }}
+            </td>
+            <td (click)="clickEspecialista(user)">{{ user.especialidad }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-header">
+    <h3>Solicitar Turno</h3>
+
+    <!-- Mostrar Especialistas y Especialidades -->
+
+    <!-- TURNO -->
+    <form [formGroup]="formTurno" (ngSubmit)="onAdd()">
+      <input
+        type="text"
+        class="form-control"
+        value="{{ this.especialistaSelected.surname }}{{
+          this.especialistaSelected.name
+        }}"
+        placeholder="Seleccione Especialista.."
+        disabled
+      />
+
+      <input
+        type="number"
+        class="form-control"
+        id="day"
+        placeholder="Ingrese Dia.."
+        formControlName="day"
+      />
+      <div *ngFor="let error of errorMessages.day">
+        <ng-container
+          *ngIf="day?.hasError(error.type) && (day.dirty || day.touched)"
+        >
+          <small class="error-message">{{ error.message }}</small>
+        </ng-container>
+      </div>
+
+      <input
+        type="text"
+        class="form-control"
+        id="time"
+        placeholder="Ingrese Hora.."
+        formControlName="time"
+      />
+      <div *ngFor="let error of errorMessages.time">
+        <ng-container
+          *ngIf="time?.hasError(error.type) && (time.dirty || time.touched)"
+        >
+          <small class="error-message">{{ error.message }}</small>
+        </ng-container>
+      </div>
+    </form>
+
+    <div class="form-group">
+      <button
+        id="btn-add"
+        class="btn btn-primary btn-lg btn-block"
+        type="submit"
+        class="btn btn-primary btn-block"
+        style="cursor: pointer"
+        (click)="onAdd()"
+        [disabled]="formTurno.invalid"
+      >
+        Agregar
+      </button>
+    </div>
+  </div>
+</div>

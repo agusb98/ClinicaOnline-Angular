@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Especialista } from 'src/app/models/especialista';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -54,5 +55,21 @@ export class UserListComponent implements OnInit {
         }
       });
     });
+  }
+
+  async setStatus(user: Especialista) {
+    user.status = !user.status;
+
+    //I dont know why but thats the way it works
+    this.cleanList();
+    await this.userService.update(user).then(() => {
+      this.cleanList();
+    });
+  }
+
+  cleanList() {
+    this.listEspecialistas.splice(0);
+    this.listAdmins.splice(0);
+    this.listPacientes.splice(0);
   }
 }

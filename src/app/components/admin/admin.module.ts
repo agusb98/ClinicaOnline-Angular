@@ -5,14 +5,14 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { UserListComponent } from 'src/app/pages/admin/user-list/user-list.component';
-import { EspecialistaListComponent } from 'src/app/pages/admin/especialista-list/especialista-list.component';
+import { UserModule } from '../user/user.module';
 
 @NgModule({
   declarations: [
-    UserListComponent, 
-    EspecialistaListComponent, 
+    UserListComponent
   ],
   imports: [
+    UserModule,
     CommonModule,
     BrowserModule,
     AdminRoutingModule,

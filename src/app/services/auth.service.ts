@@ -8,8 +8,6 @@ import { UserService } from './user.service';
 })
 export class AuthService {
 
-  public email: string = '';
-
   constructor(
     public afAuth: AngularFireAuth,
     private toastrService: ToastrService,
@@ -54,6 +52,9 @@ export class AuthService {
     if ('admin5@gmail.com' == email && 'acer1234' && password) {
       return true;
     }
+    if ('juanita234@gmail.com' == email && 'acer1234' && password) {
+      return true;
+    }
     return false;
   }
 
@@ -63,7 +64,6 @@ export class AuthService {
 
       if ((user.user.emailVerified) || (this.quickLog(email, password))) {
         this.toastrService.success('Ingreso con Exito!', 'Iniciar Sesión');
-        this.email = email;
         return user
       }
       else {
@@ -98,7 +98,6 @@ export class AuthService {
     try {
       await this.afAuth.signOut();
       this.toastrService.success('Sesion Cerrada con Exito', 'Salir');
-      this.email = '';
     }
     catch (error) { this.toastrService.error(error.message, 'Cerrar Sesión'); }
   }

@@ -1,10 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Admin } from 'src/app/models/admin';
-import { Especialista } from 'src/app/models/especialista';
-import { Paciente } from 'src/app/models/paciente';
-import { AuthService } from 'src/app/services/auth.service';
-import { UserService } from 'src/app/services/user.service';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -12,26 +6,9 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  public user$: any;
+  @Input() user: any;
 
-  constructor(private authService: AuthService, private userService: UserService) {
-  }
+  constructor() { }
 
-  ngOnInit() {
-    this.getUser();
-  }
-
-  getUser() {
-    this.userService.getAll().valueChanges().subscribe((users) => {
-      this.authService.afAuth.user.subscribe(data => {
-        try {
-          users.forEach(element => {
-            if (data.email == element.email) {
-              this.user$ = element;
-            }
-          });
-        } catch (error) { }
-      });
-    });
-  }
+  ngOnInit() { }
 }

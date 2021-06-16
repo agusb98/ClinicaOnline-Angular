@@ -13,20 +13,20 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
 
-import { UserModule } from './components/user/user.module';
-import { AdminModule } from './components/admin/admin.module';
 import { NavbarComponent } from './pages/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
+import { AdminModule } from './components/admin/admin.module';
+import { TurnoModule } from './components/turno/turno.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent
+    NavbarComponent,
   ],
   imports: [
-    AdminModule,
-    UserModule,
+    TurnoModule,  //DEBE IRSE
+    AdminModule,  //DEBE IRSE
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,

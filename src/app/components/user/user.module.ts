@@ -8,6 +8,7 @@ import { UserProfileComponent } from 'src/app/pages/user/user-profile/user-profi
 import { UserLogoutComponent } from 'src/app/pages/user/user-logout/user-logout.component';
 import { UserRegisterComponent } from 'src/app/pages/user/user-register/user-register.component';
 import { AdminAddComponent } from 'src/app/pages/admin/admin-add/admin-add.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { AdminAddComponent } from 'src/app/pages/admin/admin-add/admin-add.compo
   ],
   imports: [
     CommonModule,
+    BrowserModule,
     UserRoutingModule,
     FormsModule,
     ReactiveFormsModule,

@@ -13,6 +13,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent, ...canActivate(redirectUnauthorizedToLogin) },
   { path: 'user', loadChildren: () => import('./components/user/user-routing.module').then(m => m.UserRoutingModule) },
   { path: 'admin', loadChildren: () => import('./components/admin/admin-routing.module').then(m => m.AdminRoutingModule) },
+  { path: 'turno', loadChildren: () => import('./components/turno/turno-routing.module').then(m => m.TurnoRoutingModule) },
   { path: '**', component: ErrorComponent },
 ];
 

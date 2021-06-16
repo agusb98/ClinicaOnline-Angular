@@ -1,17 +1,40 @@
-#btn-user{
+#btn-user {
   margin-left: 1.46rem;
 }
 
-#btn-register{
+#btn-register {
   margin-left: 0.8rem;
 }
 
-.container-img-paciente {
+.img-principal-photo {
+  width: 7rem;
+  height: 5rem;
+}
+
+.btn-select-esp {
   width: 39rem;
-  height: 43.1rem;
+  height: 20.5rem;
   margin-left: 1%;
-  position: absolute;
   right: 1rem;
+}
+
+.filter {
+  width: 42%;
+}
+
+#btn-filter {
+  width: 4.9rem;
+  position: absolute;
+  top: 0.8rem;
+  right: 16rem;
+}
+
+.container-select-esp {
+  width: 39rem;
+  height: 20.5rem;
+  margin-left: 1%;
+  right: 1rem;
+  position: absolute;
 }
 
 .container-img-especialista {
