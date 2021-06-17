@@ -32,13 +32,32 @@ export class UserLoginComponent {
     else { this.inicioRapido = true; }
   }
 
+  set email(str: string) {
+    this.loginForm.controls['email'].setValue(str);
+  }
+
+  set password(str: string) {
+    this.loginForm.controls['password'].setValue(str);
+  }
+
   onLogin() {
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password);
     { this.router.navigate(['home']); }
   }
 
-  quickLog($usuario) {
-    this.usuarioSeleccionado = $usuario;
+  quickLog(str) {
+    this.password = 'acer1234';
+    switch (str) {
+      case 'Administrador':
+        this.email = 'agusszurdob@gmail.com';
+        break;
+      case 'Especialista':
+        this.email = 'especialista@especialista.com';
+        break;
+      case 'Paciente':
+        this.email = 'carlitos@gmail.com';
+        break;
+    }
   }
 }
