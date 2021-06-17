@@ -1,0 +1,78 @@
+<div
+  class="container p-4 text-center row mx-auto card text-center"
+  *ngIf="this.flagSurvey"
+>
+  <div class="card-header">
+    <h3>Encuesta de Calidad</h3>
+
+    <form [formGroup]="formSurvey" (ngSubmit)="onAdd()">
+      <input
+        type="text"
+        class="form-control"
+        id="recommend"
+        placeholder="Ingrese Recomendación.."
+        formControlName="recommend"
+      />
+      <div *ngFor="let error of errorMessages.recommend">
+        <ng-container
+          *ngIf="
+            recommend.hasError(error.type) &&
+            (recommend.dirty || recommend.touched)
+          "
+        >
+          <small class="error-message">{{ error.message }}</small>
+        </ng-container>
+      </div>
+
+      <input
+        type="text"
+        class="form-control"
+        id="atention"
+        placeholder="Ingrese Atención.."
+        formControlName="atention"
+      />
+      <div *ngFor="let error of errorMessages.atention">
+        <ng-container
+          *ngIf="
+            atention.hasError(error.type) &&
+            (atention.dirty || atention.touched)
+          "
+        >
+          <small class="error-message">{{ error.message }}</small>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+  <div class="form-group">
+    <button
+      id="btn-acept"
+      class="btn btn-danger btn-lg btn-block"
+      type="submit"
+      class="btn btn-danger btn-block"
+      style="cursor: pointer"
+      (click)="onAdd()"
+      [disabled]="formSurvey.invalid"
+    >
+      Aceptar
+    </button>
+    <button
+      id="btn-cancel"
+      class="btn btn-primary btn-lg btn-block"
+      type="submit"
+      class="btn btn-primary btn-block"
+      style="cursor: pointer"
+      (click)="onBack()"
+    >
+      Cancelar
+    </button>
+  </div>
+</div>
+<div
+  class="container p-4 text-center row mx-auto card text-center"
+  *ngIf="!this.flagSurvey"
+>
+  <div class="card-header">
+    <h3>Encuesta de Calidad</h3>
+    Usted ya realizó la Encuesta!
+  </div>
+</div>

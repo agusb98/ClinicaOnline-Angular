@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Especialista } from 'src/app/models/especialista';
 import { Paciente } from 'src/app/models/paciente';
+import { Turno } from 'src/app/models/turno';
 import { AuthService } from 'src/app/services/auth.service';
 import { TurnoService } from 'src/app/services/turno.service';
 import { UserService } from 'src/app/services/user.service';
@@ -12,11 +14,16 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class TurnoListComponent implements OnInit {
 
-  user: Paciente;
+  user: any;
   listTurnos: any[] = [];
 
   public formFilter: FormGroup;
-  public filterTurnos: any[] = this.listTurnos;
+  public filterTurnos: any[] = [];
+
+  public flagComponent = '';
+
+  @Output() turnoSelected: Turno;
+  @Output() kyndUser: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -27,12 +34,6 @@ export class TurnoListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPaciente();
-    this.formFilter = this.createValidatorsFilter(this.formBuilder);
-  }
-
-  clean() {
-    this.listTurnos = [];
-    this.filterTurnos = [];
     this.formFilter = this.createValidatorsFilter(this.formBuilder);
   }
 
@@ -78,7 +79,12 @@ export class TurnoListComponent implements OnInit {
           users.forEach(element => {
             if (data.email == element.email) {
               this.user = element;
-              this.getTurnos();
+              if (this.user.user == 'Administrador') {
+                this.getAll();
+              }
+              else {
+                this.getTurnos();
+              }
             }
           });
         } catch (error) { console.log(error); }
@@ -86,13 +92,60 @@ export class TurnoListComponent implements OnInit {
     });
   }
 
-  getTurnos() {
-    this.turnoService.getAll().valueChanges().subscribe((turnos) => {
+  async getAll() {
+    this.turnoService.getAll().valueChanges().subscribe(async (turnos) => {
+      this.listTurnos = turnos;
+      this.filterTurnos = turnos;
+      this.kyndUser = 'Administrador';
+    });
+  }
+
+  async getTurnos() {
+    this.turnoService.getAll().valueChanges().subscribe(async (turnos) => {
       turnos.forEach(element => {
         if (element.paciente.id == this.user.id) {
+          this.kyndUser = 'Paciente';
           this.listTurnos.push(element);
+          this.filterTurnos.push(element);
+        }
+        else if (element.especialista.id == this.user.id) {
+          this.kyndUser = 'Especialista';
+          this.listTurnos.push(element);
+          this.filterTurnos.push(element);
         }
       });
     });
+  }
+
+  onCancel(turno: Turno) {
+    turno.status = 'Cancelado';
+    this.turnoSelected = turno;
+    this.flagComponent = 'Cancel';
+  }
+
+  onShowComments(turno: Turno) {
+    this.turnoSelected = turno;
+    this.flagComponent = 'Comments';
+  }
+
+  onShowComment(turno: Turno) {
+    this.turnoSelected = turno;
+    this.flagComponent = 'Comment';
+  }
+
+  onSurvey(turno: Turno) {
+    this.turnoSelected = turno;
+    this.flagComponent = 'Survey';
+  }
+
+  onQualify(turno: Turno) {
+    this.turnoSelected = turno;
+    this.flagComponent = 'Qualify';
+  }
+
+  async clean() {
+    this.listTurnos = [];
+    this.filterTurnos = [];
+    this.formFilter = this.createValidatorsFilter(this.formBuilder);
   }
 }

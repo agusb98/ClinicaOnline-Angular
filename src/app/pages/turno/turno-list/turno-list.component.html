@@ -1,8 +1,8 @@
 <div class="body" id="body">
-  <div class="container" *ngIf="this.user">
-    <h1 style="text-align: center">Mis Turnos</h1>
+  <div class="container" *ngIf="this.user && this.flagComponent == ''">
+    <h1 style="text-align: center">Turnos</h1>
 
-    <div *ngIf="this.listTurnos" class="container-list">
+    <div class="container-list" *ngIf="this.user.user != 'Especialista'">
       <form [formGroup]="formFilter" (ngSubmit)="onFilter()">
         <input
           type="text"
@@ -31,18 +31,16 @@
         Agregar
       </button>
     </div>
-    <div class="container-select-esp">
-
+    <div class="container-select-esp" *ngIf="this.user.user == 'Paciente' || this.user.user == 'Administrador'">
       <table class="table table-dark mydatatable" style="text-align: left">
         <thead>
           <tr>
             <th>Especialista</th>
+            <th>Paciente</th>
             <th>Especialidad</th>
             <th>Fecha</th>
             <th>Estado</th>
-            <th>Comentario Paciente</th>
-            <th>Comentario Especialista</th>
-            <th>Encuesta</th>
+            <th>Acción</th>
           </tr>
         </thead>
         <tbody class="tbodyFilm">
@@ -50,56 +48,55 @@
             <td>
               {{ turno.especialista.surname }}, {{ turno.especialista.name }}
             </td>
+            <td>
+              {{ turno.paciente.surname }}, {{ turno.paciente.name }}
+            </td>
             <td>{{ turno.especialidad }}</td>
             <td>{{ turno.date }}</td>
             <td>{{ turno.status }}</td>
-            <td>{{ turno.commentPaciente }}</td>
-            <td>{{ turno.commentEspecialista }}</td>
-            <td>{{ turno.encuesta }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div *ngIf="this.user.user == 'Especialista'">
-      <table class="table table-dark mydatatable" style="text-align: left">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Edad</th>
-            <th>DNI</th>
-            <th>Email</th>
-            <th>Foto</th>
-            <th>Especialidad</th>
-            <th>Tipo</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody class="tbodyFilm">
-          <tr *ngFor="let user of this.listEspecialistas">
-            <td>{{ user.name }}</td>
-            <td>{{ user.surname }}</td>
-            <td>{{ user.age }}</td>
-            <td>{{ user.dni }}</td>
-            <td>{{ user.email }}</td>
-            <td><img src="{{ user.photo }}" class="img-principal-photo" /></td>
-            <td>{{ user.especialidad }}</td>
-            <td>{{ user.user }}</td>
-            <td>
+            <td
+              *ngIf="turno.status == 'Pendiente' || turno.status == 'Aceptado'"
+            >
               <button
-                *ngIf="user.status"
-                class="btn btn-danger"
-                (click)="setStatus(user)"
+                class="btn btn-danger btn-block"
+                style="cursor: pointer"
+                (click)="onCancel(turno)"
               >
-                Desabilitar
+                Cancelar
               </button>
               <button
-                *ngIf="!user.status"
-                class="btn btn-success"
-                (click)="setStatus(user)"
+                class="btn btn-warning btn-block"
+                style="cursor: pointer"
+                (click)="onShowComments(turno)"
               >
-                Habilitar
+                Comentarios
+              </button>
+            </td>
+            <td *ngIf="turno.status == 'Realizado'">
+              <button
+                class="btn btn-warning btn-block"
+                style="cursor: pointer"
+                (click)="onSurvey(turno)"
+              >
+                Encuesta
+              </button>
+              <button
+                class="btn btn-success btn-block"
+                style="cursor: pointer"
+                (click)="onQualify(turno)"
+              >
+                Calificar
+              </button>
+            </td>
+            <td
+              *ngIf="turno.status == 'Cancelado' || turno.status == 'Rechazado'"
+            >
+              <button
+                class="btn btn-warning btn-block"
+                style="cursor: pointer"
+                (click)="onShowComments(turno)"
+              >
+                Comentarios
               </button>
             </td>
           </tr>
@@ -107,35 +104,78 @@
       </table>
     </div>
 
-    <div *ngIf="this.user.user == 'Administrador'">
+    <!-- ESPECIALISTA -->
+
+    <div class="container-select-esp" *ngIf="this.user.user == 'Especialista'">
       <table class="table table-dark mydatatable" style="text-align: left">
         <thead>
           <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Edad</th>
-            <th>DNI</th>
-            <th>Email</th>
-            <th>Foto Principal</th>
-            <th>Foto Secundaria</th>
-            <th>Obra Social</th>
-            <th>Tipo</th>
+            <th>Paciente</th>
+            <th>Especialidad</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acción</th>
           </tr>
         </thead>
         <tbody class="tbodyFilm">
-          <tr *ngFor="let user of this.listPacientes">
-            <td>{{ user.name }}</td>
-            <td>{{ user.surname }}</td>
-            <td>{{ user.age }}</td>
-            <td>{{ user.dni }}</td>
-            <td>{{ user.email }}</td>
-            <td><img src="{{ user.photo }}" class="img-principal-photo" /></td>
-            <td><img src="{{ user.photo2 }}" class="img-principal-photo" /></td>
-            <td>{{ user.obra_social }}</td>
-            <td>{{ user.user }}</td>
+          <tr *ngFor="let turno of this.filterTurnos">
+            <td>{{ turno.paciente.surname }}, {{ turno.paciente.name }}</td>
+            <td>{{ turno.especialidad }}</td>
+            <td>{{ turno.date }}</td>
+            <td>{{ turno.status }}</td>
+            <td>
+              <button
+                *ngIf="turno.status == 'Pendiente'"
+                class="btn btn-danger btn-block"
+                style="cursor: pointer"
+                (click)="onCancel(turno)"
+              >
+                Cancelar
+              </button>
+              <button
+                *ngIf="turno.status == 'Pendiente'"
+                class="btn btn-warning btn-block"
+                style="cursor: pointer"
+                (click)="onReject(turno)"
+              >
+                Rechazar
+              </button>
+              <button
+                *ngIf="turno.status == 'Pendiente'"
+                class="btn btn-warning btn-block"
+                style="cursor: pointer"
+                (click)="onAcept(turno)"
+              >
+                Aceptar
+              </button>
+              <button
+                *ngIf="turno.status == 'Cancelado' || turno.status == 'Realizado'"
+                class="btn btn-warning btn-block"
+                style="cursor: pointer"
+                (click)="onShowComment(turno)"
+              >
+                Comentario
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
+  </div>
+
+  <div class="container" *ngIf="this.flagComponent == 'Cancel'">
+    <app-turno-cancel [turno]="[turnoSelected]"></app-turno-cancel>
+  </div>
+  <div class="container" *ngIf="this.flagComponent == 'Comments'">
+    <app-comment-list [turno]="[turnoSelected]"></app-comment-list>
+  </div>
+  <div class="container" *ngIf="this.flagComponent == 'Comment'">
+    <app-comment-single [turno]="[turnoSelected]"></app-comment-single>
+  </div>
+  <div class="container" *ngIf="this.flagComponent == 'Survey'">
+    <app-survey-add [turno]="[turnoSelected]"></app-survey-add>
+  </div>
+  <div class="container" *ngIf="this.flagComponent == 'Qualify'">
+    <app-qualify-add [turno]="[turnoSelected]"></app-qualify-add>
   </div>
 </div>

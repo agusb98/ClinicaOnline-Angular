@@ -5,9 +5,9 @@
         <div class="card">
           <span class="border border"></span>
           <img [src]="user.photo" alt="" class="rounded-circle img-fluid" />
-          <img *ngIf="'{{ user.photo2 }}'" [src]="user.photo2" alt="" class="rounded-circle img-fluid img-photo-secondary" />
+          <img *ngIf="this.user.user == Paciente" [src]="user.photo2" alt="" class="rounded-circle img-fluid img-photo-secondary" />
           <div class="card-body">
-            <h4 class="card-title">{{ user.name }}, {{ user.surname }}</h4>
+            <h4 class="card-title">{{ user.name }} {{ user.surname }}</h4>
             <p class="card-text">{{ user.age }} años</p>
           </div>
         </div>
@@ -17,13 +17,12 @@
           <div class="card-body">
             <ul class="list-group">
               <li class="list-group-item">
-                {{ user.user }}:
-                <span class="font-weigh-bold">{{ user.surname }} {{ user.name }}</span>
+                Usuario: {{ user.user }}
               </li>
-              <li *ngIf="'{{ user.especialidad }}'" class="list-group-item">
-                Especialidad: {{ user.especialidad }}
+              <li *ngIf="this.user.user == 'Especialista'" class="list-group-item">
+                Especialista en: {{ user.especialidad }}
               </li>
-              <li *ngIf="'{{ user.obra_social }}'" class="list-group-item">
+              <li *ngIf="this.user.user == 'Paciente'" class="list-group-item">
                 Obra Social: {{ user.obra_social }}
               </li>
               <li class="list-group-item">DNI: {{ user.dni }}</li>

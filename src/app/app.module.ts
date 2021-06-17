@@ -17,6 +17,7 @@ import { NavbarComponent } from './pages/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import { AdminModule } from './components/admin/admin.module';
 import { TurnoModule } from './components/turno/turno.module';
+import { CommentSingleComponent } from './pages/comment/comment-single/comment-single.component';
 
 
 @NgModule({

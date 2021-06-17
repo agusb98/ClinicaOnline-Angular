@@ -1,5 +1,6 @@
 import { Component, OnInit, } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Especialista } from 'src/app/models/especialista';
 import { Paciente } from 'src/app/models/paciente';
@@ -15,7 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class TurnoAddComponent implements OnInit {
 
-  public user: Paciente = new Paciente();
+  public user: any = new Paciente();
   public listEspecialistas: any[] = [];
   public listTurnos: any[] = [];
   public formTurno: FormGroup;
@@ -30,6 +31,7 @@ export class TurnoAddComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private toastr: ToastrService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -226,13 +228,23 @@ export class TurnoAddComponent implements OnInit {
     try {
       this.setValuesTurno();
       if (this.checkTurno()) {
-        const turno = this.formTurno.value as Turno;
+        const turno = this.getValues();
         this.turnoService.add(turno);  //Save Turno
-        this.cleanForm();
+        this.router.navigate(['/home'])
       }
       else { this.toastr.error('Este horario no se encuentra disponible', 'Status Turno'); }
     }
     catch (error) { console.log(error); }
+  }
+  getValues() {
+    return {
+      id: this.formTurno.value.id,
+      date: this.formTurno.value.date,
+      especialidad: this.formTurno.value.especialidad,
+      especialista: this.formTurno.value.especialista,
+      paciente: this.formTurno.value.paciente,
+      status: this.formTurno.value.status,
+    };
   }
 
   clickEspecialista(esp: Especialista) {

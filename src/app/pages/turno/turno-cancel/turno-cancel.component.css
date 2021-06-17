@@ -1,0 +1,22 @@
+/* button {
+  margin: 0rem;
+}
+
+#btn-acept,
+#btn-cancel {
+  width: 8rem;
+  margin: 1%;
+  position: relative;
+}
+#btn-acept {
+  left: 35%;
+}
+#btn-cancel {
+  left: 50%;
+  top: -3rem;
+  position: relative;
+} */
+
+small {
+  color: red;
+}

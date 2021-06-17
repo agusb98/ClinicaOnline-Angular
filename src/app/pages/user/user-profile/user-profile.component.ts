@@ -13,21 +13,22 @@ export class UserProfileComponent implements OnInit {
 
   public user: any;
   constructor(private authService: AuthService, private userService: UserService) { 
-    this.CargarUsuario();
+    this.getUser();
   }
 
   ngOnInit(): void { }
 
-  private CargarUsuario() {
-    this.userService.getAll().valueChanges().subscribe((data: any[]) => {
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].email == 'agusszurdob@gmail.com') {
-          this.user = data[i];
-          break;
-        }
-      }
+  getUser() {
+    this.userService.getAll().valueChanges().subscribe((users) => {
+      this.authService.afAuth.user.subscribe(data => {
+        try {
+          users.forEach(element => {
+            if (data.email == element.email) {
+              this.user = element;
+            }
+          });
+        } catch (error) { }
+      });
     });
-
-
   }
 }

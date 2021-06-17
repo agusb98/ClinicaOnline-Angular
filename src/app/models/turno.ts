@@ -6,9 +6,7 @@ export class Turno {
     paciente: Paciente;
     especialista: Especialista;
     date: string;
-    status: 'Pendiente' | 'Finalizado' | 'Cancelado';
+    status: 'Pendiente' | 'Finalizado' | 'Cancelado' | 'Aceptado' | 'Rechazado';
     especialidad: string;
-    commentPaciente: string;
-    commentEspecialista: string;
     encuesta: number;
 }

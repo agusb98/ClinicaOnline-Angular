@@ -30,12 +30,26 @@
         <i class="fa config-justify"></i> Turnos</a
       >
       <a
-        *ngIf="user.user == 'Especialista'"
         class="navbar-brand"
-        routerLink="/user/list"
+        routerLink="/comment/list"
+        routerLinkActive="active"
+      >
+        <i class="fa config-justify"></i> Comentarios</a
+      >
+      <a
+        *ngIf="user.user == 'Especialista' || user.user == 'Administrador'"
+        class="navbar-brand"
+        routerLink="/turno/list"
         routerLinkActive="active"
       >
         <i class="fa config-justify"></i> Turnos</a
+      >
+      <a
+        class="navbar-brand"
+        routerLink="/user/profile"
+        routerLinkActive="active"
+      >
+        <i class="fa config-justify"></i> Perfil</a
       >
       <button
         class="navbar-toggler"

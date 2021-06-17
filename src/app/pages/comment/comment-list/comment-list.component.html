@@ -1,0 +1,62 @@
+<div class="body" id="body">
+  <div class="container" *ngIf="this.listComments">
+    <div *ngIf="!this.turno">
+      <h1 style="text-align: center">Comentarios</h1>
+      <div class="container-select-esp">
+        <table class="table table-dark mydatatable" style="text-align: left">
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Especialista</th>
+              <th>Especialidad</th>
+              <th>Comentario</th>
+            </tr>
+          </thead>
+          <tbody class="tbodyFilm">
+            <tr *ngFor="let comment of this.listComments">
+              <td>
+                {{ comment.paciente.surname }}, {{ comment.paciente.name }}
+              </td>
+              <td>
+                {{ comment.especialista.surname }},
+                {{ comment.especialista.name }}
+              </td>
+              <td>{{ comment.especialista.especialidad }}</td>
+              <td>{{ comment.comment }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div *ngIf="this.turno">
+      <h1 *ngIf="this.turno" style="text-align: center">
+        Comentarios a {{ this.turno[0].especialista.surname }},
+        {{ this.turno[0].especialista.name }}
+      </h1>
+
+      <div class="container-select-esp">
+        <table class="table table-dark mydatatable" style="text-align: left">
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Comentario</th>
+              <th>Encuesta</th>
+              <th>Calificación</th>
+            </tr>
+          </thead>
+          <tbody class="tbodyFilm">
+            <tr *ngFor="let comment of this.listComments">
+              <td>
+                {{ comment.paciente.surname }}, {{ comment.paciente.name }}
+              </td>
+              <td>{{ comment.comment }}</td>
+              <td><app-qualify-get></app-qualify-get></td>
+              <td><app-survey-get></app-survey-get></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

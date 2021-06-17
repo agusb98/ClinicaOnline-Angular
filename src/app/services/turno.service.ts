@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { ToastrService } from 'ngx-toastr';
 import { Turno } from '../models/turno';
 
@@ -9,37 +9,36 @@ import { Turno } from '../models/turno';
 export class TurnoService {
 
   pathOfCollection = '/clinica-tur';
-
+  referenceToCollection: AngularFirestoreCollection;
 
   constructor(
     private toastr: ToastrService,
     private db: AngularFirestore
-  ) { }
+  ) {
+    this.referenceToCollection = this.db.collection(this.pathOfCollection, ref => ref.orderBy('date', 'asc'));
+  }
 
   add(data: any) {
     try {
       data.id = this.db.createId();
-      const turno = {
-        id: data.id,
-        date: data.date,
-        especialista: data.especialista,
-        especialidad: data.especialidad,
-        paciente: data.paciente,
-        status: data.status
-      }
-      const retorno = this.db.collection(this.pathOfCollection).add({ ...turno });  //  llaves es objeto, 3 puntitos es dinamico
+      this.referenceToCollection.doc(data.id).set({ ...data })
       this.toastr.success('Datos cargados con Exito!', 'Status Turno');
-      return retorno;
     }
     catch (error) {
       this.toastr.error('Error al momento de registrar Turno', 'Status Turno');
     }
   }
 
-  getAll() {
-    try {
-      return this.db.collection<any>(this.pathOfCollection, ref => ref.orderBy('date', 'asc'));
+  async update(data: Turno) {
+    try {      
+      await this.referenceToCollection.doc(data.id).update({ ...data });
+      this.toastr.success('Datos Actualizados con Exito', 'Update');
     }
+    catch (error) { this.toastr.error(error, 'Update'); }
+  }
+
+  getAll() {
+    try { return this.referenceToCollection; }
     catch (error) { this.toastr.error('Error at the moment to get turnos..', 'Data turnos'); }
   }
 }

@@ -9,7 +9,7 @@ import { UserModule } from '../user/user.module';
 
 @NgModule({
   declarations: [
-    UserListComponent
+    UserListComponent,
   ],
   imports: [
     UserModule,

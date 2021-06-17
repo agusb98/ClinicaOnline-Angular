@@ -1,0 +1,44 @@
+<div class="body" id="body">
+  <div class="container" *ngIf="this.comment">
+    <div *ngIf="this.turno">
+      <h1 style="text-align: center">Comentarios Recibidos</h1>
+
+      <div class="container-select-esp">
+        <table class="table table-dark mydatatable" style="text-align: left">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Paciente</th>
+              <th>Comentario</th>
+              <th>Calificación</th>
+              <th>Cuestionario</th>
+            </tr>
+          </thead>
+          <tbody class="tbodyFilm">
+            <tr>
+              <td>
+                {{ this.comment.date }}
+              </td>
+              <td>
+                {{ this.comment.paciente.surname }},
+                {{ this.comment.paciente.name }}
+              </td>
+
+              <td *ngIf="this.comment.comment">{{ this.comment.comment }}</td>
+              <td *ngIf="!this.comment.comment">-</td>
+              <td *ngIf="this.comment.qualify">{{ this.comment.qualify }}</td>
+              <td *ngIf="!this.comment.qualify">-</td>
+              <td *ngIf="this.comment.survey.recommend">
+                Recomienda: {{ this.comment.survey.recommend }}
+              </td>
+              <td *ngIf="this.comment.survey.recommend">
+                Atención: {{ this.comment.survey.atention }}
+              </td>
+              <td *ngIf="!this.comment.survey.recommend">-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

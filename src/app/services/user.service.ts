@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 //Firestore
-import { AngularFirestore, } from '@angular/fire/firestore/';
+import { AngularFirestore, AngularFirestoreCollection, } from '@angular/fire/firestore/';
 import { AngularFireStorage } from '@angular/fire/storage';
 import * as firebase from 'firebase';
 
@@ -13,13 +13,16 @@ import { Especialista } from '../models/especialista';
   providedIn: 'root'
 })
 export class UserService {
-  pathOfCollection = '/clinica-user';
+  private pathOfCollection = '/clinica-user';
+  private referenceToCollection: AngularFirestoreCollection;
 
   constructor(
     private toastr: ToastrService,
     private db: AngularFirestore,
     private dbStorage: AngularFireStorage
-  ) { }
+  ) {
+    this.referenceToCollection = this.db.collection(this.pathOfCollection, ref => ref.orderBy('name', 'asc'));
+  }
 
   async add(data: any, photo: any, photo2?: any) {
     try {
@@ -53,7 +56,7 @@ export class UserService {
         });
       }
       setTimeout(() => {
-        return this.db.collection(this.pathOfCollection).add({ ...data });  //  llaves es objeto, 3 puntitos es dinamico
+        return this.referenceToCollection.doc(data.id).set({ ...data });  //  llaves es objeto, 3 puntitos es dinamico
       }, 8000);
     }
     catch (error) { this.toastr.error(error, 'Register'); }
@@ -62,14 +65,7 @@ export class UserService {
 
   getAll() {
     try {
-      return this.db.collection<any>(this.pathOfCollection, ref => ref.orderBy('user', 'asc'));
-    }
-    catch (error) { this.toastr.error('Error at the moment to get users..', 'Data users'); }
-  }
-
-  getOne(email: string) {
-    try {
-      return this.db.collection<any>(this.pathOfCollection, ref => ref.where('email', '==', email));
+      return this.referenceToCollection;
     }
     catch (error) { this.toastr.error('Error at the moment to get users..', 'Data users'); }
   }
@@ -89,13 +85,10 @@ export class UserService {
     });
   }
 
-  async update(data: Especialista) {
+  async update(data: any) {
     try {
-      await this.db.collection(this.pathOfCollection).doc(data.id).delete().then(async () => {
-        await this.db.collection(this.pathOfCollection).doc(data.id).set({ ...data }).then(() => {
-          this.toastr.success('Datos Actualizados con Exito', 'Update');
-        });
-      });
+      await this.referenceToCollection.doc(data.id).update({ ...data });
+      this.toastr.success('Datos Actualizados con Exito', 'Update');
     }
     catch (error) { this.toastr.error(error, 'Update'); }
   }

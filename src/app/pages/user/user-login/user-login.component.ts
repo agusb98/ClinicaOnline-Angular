@@ -32,58 +32,13 @@ export class UserLoginComponent {
     else { this.inicioRapido = true; }
   }
 
-  admin() {
-    this.loginForm.controls['email'].setValue("admin@admin.com");
-    this.loginForm.controls['clave'].setValue("111111");
-  }
-
-  paciente() {
-    this.loginForm.controls['email'].setValue("paciente@paciente.com");
-    this.loginForm.controls['clave'].setValue("222222");
-  }
-
-  especialista() {
-    this.loginForm.controls['email'].setValue("especialista@especialista.com");
-    this.loginForm.controls['clave'].setValue("333333");
-  }
-
-  async onLogin() {
+  onLogin() {
     const { email, password } = this.loginForm.value;
-    await this.authService.login(email, password).then((res: any) =>{
-      
-    });
+    this.authService.login(email, password);
     { this.router.navigate(['home']); }
-  }
-
-  isAdmin(user) {
-    let userAdmin = this.listadoUsuarios.filter(u => u.id == user.uid);
-    console.log(userAdmin[0].perfil)
-
-    if (userAdmin[0].perfil == "admin") {
-      
-
-      this.router.navigate(["/seccionUsuarios"]);
-
-    }
   }
 
   quickLog($usuario) {
     this.usuarioSeleccionado = $usuario;
   }
-  /* 
-    async onLogin() {
-      const { email, password } = this.loginForm.value;
-      try {
-        const user = await this.authService.login(email, password);
-        if (user) { 
-          this.router.navigate(['/home']);   //Redirect to homepage
-        }
-      }
-      catch (error) { }
-    }
-  
-    quickLog(){
-      this.loginForm.value.password = '12345678';
-      this.loginForm.value.email= "el.octavio.villegas@gmail.com";
-    } */
 }
