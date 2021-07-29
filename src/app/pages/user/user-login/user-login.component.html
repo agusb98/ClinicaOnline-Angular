@@ -3,7 +3,7 @@
     <div class="col-md-4 mx-auto">
       <div class="card text-center">
         <div class="card-header">
-          <h3>Login</h3>
+          <h3>{{'Ingresar sesión' | translate}}</h3>
           <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
             <div class="card-body">
               <div class="form-group">
@@ -31,19 +31,49 @@
                 />
               </div>
               <div class="form-group">
-                <button class="btn btn-primary btn-lg btn-block">Login</button>
+                <button class="btn btn-primary btn-lg btn-block">
+                  {{'Ingresar' | translate}}
+                </button>
               </div>
               <div class="form-group mt-3">
                 <p>
-                  Create an account
+                  {{'Crear una Cuenta' | translate}}
                   <a routerLink="/user/register" routerLinkActive="active"
-                    >Register</a
+                    >{{'Registrarse' | translate}}</a
                   >
                 </p>
-                <button (click)="quickLog('Especialista')" id="btn-quicklog" class="btn btn-success">Especialista</button>
-                <button (click)="quickLog('Administrador')" id="btn-quicklog" class="btn btn-danger">Admin</button>
-                <button (click)="quickLog('Paciente')" id="btn-quicklog" class="btn btn-warning">Paciente</button>
+                <button
+                  (click)="quickLog('Especialista')"
+                  id="btn-Especialista"
+                  class="btn btn-success"
+                >
+                  {{'Especialista' | translate}}
+                </button>
+                <button
+                  (click)="quickLog('Administrador')"
+                  id="btn-Administrador"
+                  class="btn btn-danger"
+                >
+                  {{'Admin' | translate}}
+                </button>
+                <button
+                  (click)="quickLog('Paciente')"
+                  id="btn-Paciente"
+                  class="btn btn-warning"
+                >
+                  {{'Paciente' | translate}}
+                </button>
               </div>
+            </div>
+            <div class="form-group mt-3">
+              <label>
+                <small>{{'Lenguaje' | translate}} </small>
+                <select class="custom-select mt-3" #langSelect (change)="changeLang(langSelect.value)">
+                  <option *ngFor="let lang of langs" [value]="lang">
+                    {{ lang }}
+                  </option>
+                </select>
+              </label>
             </div>
           </form>
         </div>

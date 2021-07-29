@@ -9,21 +9,34 @@ import { UserLogoutComponent } from 'src/app/pages/user/user-logout/user-logout.
 import { UserRegisterComponent } from 'src/app/pages/user/user-register/user-register.component';
 import { AdminAddComponent } from 'src/app/pages/admin/admin-add/admin-add.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { EspecialidadListComponent } from 'src/app/pages/especialidad/especialidad-list/especialidad-list.component';
+
+//Traductor
+import { TranslateModule } from '@ngx-translate/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgxCaptchaModule } from 'ngx-captcha';
+import { CaptchaComponent } from '../captcha/captcha.component';
+
 
 @NgModule({
   declarations: [
     UserLoginComponent,
-    UserLogoutComponent, 
-    UserProfileComponent, 
-    UserRegisterComponent, 
-    AdminAddComponent
+    UserLogoutComponent,
+    UserProfileComponent,
+    UserRegisterComponent,
+    EspecialidadListComponent,
+    AdminAddComponent,
+    CaptchaComponent
   ],
   imports: [
+    TranslateModule,
     CommonModule,
     BrowserModule,
     UserRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
+    NgxCaptchaModule
   ]
 })
 export class UserModule { }

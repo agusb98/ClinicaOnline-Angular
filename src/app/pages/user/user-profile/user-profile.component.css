@@ -1,5 +1,22 @@
-.img-photo-secondary{
-    width: 30%;
-    height: 25%;
-    right: 100%;
+.img-photo-secondary {
+  width: 7rem;
+  position: absolute;
+  top: 40%;
+}
+
+.title {
+  font-weight: bold;
+}
+
+#btn-back {
+  background-color: transparent;
+  border: none;
+  margin-left: 64rem;
+  height: 2.6rem;
+  width: 2.5rem;
+}
+
+#btn-download {
+  margin-left: 59.5rem;
+  width: 7rem;
 }

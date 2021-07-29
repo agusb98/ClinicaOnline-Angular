@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Admin } from 'src/app/models/admin';
+import { Especialidad } from 'src/app/models/especialidad';
 import { Especialista } from 'src/app/models/especialista';
 import { Paciente } from 'src/app/models/paciente';
 import { AuthService } from 'src/app/services/auth.service';
@@ -18,6 +19,7 @@ export class UserRegisterComponent implements OnInit {
   photo: any = null;
   photo2: any = null;
 
+  @Input() captcha = false;
   @Input() isAdmin = false;
   flagEspecialidad: boolean = false;
 
@@ -26,11 +28,12 @@ export class UserRegisterComponent implements OnInit {
   public formPaciente: FormGroup;
   public formEspecialista: FormGroup;
 
+  especialidadSelected: any[];
+
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
-    private espService: EspecialidadService,
     private router: Router,
   ) {
   }
@@ -40,11 +43,19 @@ export class UserRegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.selectButtons();
     this.formAdmin = this.createValidatorsAdmin(this.formBuilder);
     this.formPaciente = this.createValidatorsPaciente(this.formBuilder);
     this.formEspecialista = this.createValidatorsEspecialista(this.formBuilder);
 
     if (this.isAdmin) { this.kyndUser = 'Administrador'; }
+  }
+
+  selectButtons() {
+    if (this.isAdmin) {
+      document.getElementById('btn-user-paciente').style.display = 'none';
+      document.getElementById('btn-user-especialista').style.display = 'none';
+    }
   }
 
   createValidatorsAdmin(formBuilder: FormBuilder): FormGroup {
@@ -55,7 +66,7 @@ export class UserRegisterComponent implements OnInit {
       dni: new FormControl('', [Validators.required, Validators.min(11111111), Validators.max(99999999)]),
       email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
       password: new FormControl('', [Validators.required, Validators.min(6), Validators.max(15)]),
-      user: new FormControl('Administrador', [Validators.required])
+      user: new FormControl('ADMINISTRADOR', [Validators.required])
     });
   }
 
@@ -68,7 +79,7 @@ export class UserRegisterComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
       password: new FormControl('', [Validators.required, Validators.min(6), Validators.max(15)]),
       obra_social: new FormControl('', [Validators.required]),
-      user: new FormControl('Paciente', [Validators.required])
+      user: new FormControl('PACIENTE', [Validators.required])
     });
   }
 
@@ -80,8 +91,8 @@ export class UserRegisterComponent implements OnInit {
       dni: new FormControl('', [Validators.required, Validators.min(11111111), Validators.max(99999999)]),
       email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
       password: new FormControl('', [Validators.required, Validators.min(6), Validators.max(15)]),
-      user: new FormControl('Especialista', [Validators.required]),
-      especialidad: new FormControl('', [Validators.required]),
+      schedule: new FormControl('', [Validators.required, Validators.pattern("^((0[8-9])|1[0-8]) a ((09)|1[0-9])$")]),
+      user: new FormControl('ESPECIALISTA', [Validators.required]),
       status: (false)
     });
   }
@@ -156,8 +167,8 @@ export class UserRegisterComponent implements OnInit {
     return this.formPaciente.get('obra_social');
   }
 
-  get especialidad() {
-    return this.formEspecialista.get('especialidad');
+  get schedule() {
+    return this.formEspecialista.get('schedule');
   }
 
   booleanEspecialidad() {
@@ -197,9 +208,10 @@ export class UserRegisterComponent implements OnInit {
     obra_social: [
       { type: 'required', message: 'La obra social es Requerida' },
     ],
-    especialidad: [
-      { type: 'required', message: 'La especialidad es Requerida' },
-    ]
+    schedule: [
+      { type: 'required', message: 'La disponibilidad al público es Requerida' },
+      { type: 'pattern', message: 'Ingrese una disponibilidad Válida, ej: 09 a 18' },//CHECKEAR
+    ],
   }
 
   onUpload($event, num: number) {
@@ -223,11 +235,22 @@ export class UserRegisterComponent implements OnInit {
 
   async onRegisterPaciente() {
     if (this.validPhoto(this.photo) && this.validPhoto(this.photo2)) {
-      const { email, password } = this.formPaciente.value;
-      await this.authService.register(email, password);   //Save user
-      this.formPaciente.removeControl('password');
+      await this.authService.register(this.email.value, this.password.value);   //Save user
 
-      const paciente = this.formPaciente.value as Paciente;
+      //Importante: tanto su ID como photos serán seteadas dentro de UserService.add
+      const paciente = new Paciente(
+        '',
+        this.name.value,
+        this.surname.value,
+        this.age.value,
+        this.dni.value,
+        this.obra_social.value,
+        this.email.value,
+        this.password.value,
+        '', '',
+        new Date()
+      );
+
       await this.userService.add(paciente, this.photo, this.photo2);  //Save Paciente
       this.router.navigate(['user/login']);
     }
@@ -237,7 +260,6 @@ export class UserRegisterComponent implements OnInit {
     if (this.validPhoto(this.photo)) {
       const { email, password } = this.formAdmin.value;
       await this.authService.register(email, password);   //Save user
-      this.formAdmin.removeControl('password');
 
       const admin = this.formAdmin.value as Admin;
 
@@ -248,15 +270,27 @@ export class UserRegisterComponent implements OnInit {
 
   async onRegisterEspecialista() {
     if (this.validPhoto(this.photo)) {
-      const { email, password } = this.formEspecialista.value;
-      await this.authService.register(email, password);   //Save user
-      this.formPaciente.removeControl('password');
+      await this.authService.register(this.email.value, this.password.value);   //Save user
 
-      const { especialidad } = this.formEspecialista.value;
-      this.checkEspecialidad(especialidad);
+      //Importante: tanto su ID como photos serán seteadas dentro de UserService.add
 
-      const espe = this.formEspecialista.value as Especialista;
-      await this.userService.add(espe, this.photo);  //Save Especialista
+      let schedule = this.schedule.value.split(' ');
+
+      const especialista = new Especialista(
+        '',
+        this.name.value,
+        this.surname.value,
+        this.age.value,
+        this.dni.value,
+        this.especialidadSelected as Especialidad[],
+        { start: schedule[0], end: schedule[2] },
+        this.email.value,
+        this.password.value,
+        '', false,
+        new Date()
+      );
+
+      await this.userService.add(especialista, this.photo);  //Save especialista
       this.router.navigate(['user/login']);
     }
   }
@@ -281,20 +315,11 @@ export class UserRegisterComponent implements OnInit {
     catch (error) { }
   }
 
-  checkEspecialidad(name: string) {
-    let flagEsp = false;
+  onSelect($event) {
+    this.especialidadSelected = $event;
+  }
 
-    this.espService.getAll().valueChanges().subscribe((data) => {
-      data.forEach(esp => {
-        if (esp.name == name) {
-          flagEsp = true;
-        }
-      });
-    })
-
-    //If flag false, there is no especialidad with that name in firebase
-    if (!flagEsp) {
-      this.espService.add(name);
-    }
+  onCaptcha($event){
+    this.captcha = $event;    
   }
 }

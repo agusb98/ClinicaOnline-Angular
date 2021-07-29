@@ -1,4 +1,20 @@
-<app-navbar [user]="this.user"></app-navbar>
-<div class="container p-4">
-  <router-outlet></router-outlet>
+<app-navbar></app-navbar>
+
+<div
+  class="container p-4"
+  [@routeAnimations]="
+    o && o.activatedRouteData && o.activatedRouteData['animation']
+  "
+>
+  <router-outlet #o="outlet">
+  </router-outlet>
+</div>
+
+<div class="container-info-app">
+  <section id="copyright">
+    <div class="wrapper">
+      Made by Baez Nuñez, Agustin for UTN LAB IV
+      <br />Angular, bootstrap,
+    </div>
+  </section>
 </div>

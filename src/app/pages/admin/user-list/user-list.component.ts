@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Especialista } from 'src/app/models/especialista';
 import { UserService } from 'src/app/services/user.service';
 
@@ -9,13 +10,10 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserListComponent implements OnInit {
 
-  listEspecialistas: any[] = [];
-  listAdmins: any[] = [];
-  listPacientes: any[] = [];
+  list$: Observable<any> = null;
+  list: any[] = [];
 
-  onlyPaciente: boolean = true;
-  onlyAdmin: boolean = false;
-  onlyEspecialista: boolean = false;
+  kyndUser: 'PACIENTE' | 'ESPECIALISTA' | 'ADMINISTRADOR' = 'PACIENTE';
 
   constructor(private userService: UserService) { }
 
@@ -23,38 +21,11 @@ export class UserListComponent implements OnInit {
     this.getUsers();
   }
 
-  showPacientes(){
-    this.onlyPaciente = true;
-    this.onlyAdmin = false;
-    this.onlyEspecialista = false;
-  }
+  getUsers(kynd: 'PACIENTE' | 'ESPECIALISTA' | 'ADMINISTRADOR' = 'PACIENTE'){
+    this.kyndUser = kynd;
 
-  showEspecialista(){
-    this.onlyEspecialista = true;
-    this.onlyPaciente = false;
-    this.onlyAdmin = false;
-  }
-
-  showAdministradores(){
-    this.onlyAdmin = true;
-    this.onlyPaciente = false;
-    this.onlyEspecialista = false;
-  }
-
-  getUsers() {
-    this.userService.getAll().valueChanges().subscribe((users) => {
-      users.forEach(user => {
-        if(user.user == 'Administrador'){
-          this.listAdmins.push(user);
-        }
-        else if(user.user == 'Especialista'){
-          this.listEspecialistas.push(user);
-        }
-        else if(user.user == 'Paciente'){
-          this.listPacientes.push(user);
-        }
-      });
-    });
+    this.list$ = this.userService.getByProfile(this.kyndUser);
+    this.list$.subscribe(data => this.list = data);
   }
 
   async setStatus(user: Especialista) {
@@ -68,8 +39,7 @@ export class UserListComponent implements OnInit {
   }
 
   cleanList() {
-    this.listEspecialistas.splice(0);
-    this.listAdmins.splice(0);
-    this.listPacientes.splice(0);
+    this.list$ = null;
+    this.list = [];
   }
 }

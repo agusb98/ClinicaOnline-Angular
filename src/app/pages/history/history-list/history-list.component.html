@@ -1,0 +1,155 @@
+<div class="container-fluid" *ngIf="this.action == '' && this.list$ | async">
+  <h1>Historia Clínica</h1>
+
+  <div class="container-filter">
+    <button
+      id="btn-filter"
+      type="submit"
+      class="btn btn-primary btn-block"
+      style="cursor: pointer"
+      (click)="onFilter()"
+    >
+      🔎 Buscar
+    </button>
+
+    <form [formGroup]="formFilter" (ngSubmit)="onFilter()">
+      <input
+        type="text"
+        formControlName="filter"
+        class="form-control filter"
+        placeholder="Buscar.."
+      />
+    </form>
+  </div>
+
+  <div class="row" *ngFor="let turno of this.list">
+    <div class="col-md-4">
+      <div class="card">
+        <span class="border border"></span>
+        <img [src]="turno.paciente.photo" class="img-fluid" />
+        <img
+          [src]="turno.paciente.photo2"
+          class="rounded-circle img-fluid img-photo-secondary"
+        />
+        <div class="card-body" style="text-align: center">
+          <h4 class="card-title title">
+            {{ turno.paciente.name | slice: 0:7 }}
+            {{ turno.paciente.surname | slice: 0:10 }}
+          </h4>
+          <p class="card-text">{{ turno.paciente.age }} años</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 align-self-center">
+      <div class="card">
+        <div class="card-body">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="title">Fecha: </span>
+              <span class="subtitle">{{ turno.time_updated.toDate() | date: 'dd/MM/yyyy HH:mm' }} </span>
+            </li>
+
+            <li class="list-group-item">
+              <span class="title">Altura: </span>
+              <span class="subtitle">{{ turno.history?.height }} </span>
+            </li>
+
+            <li class="list-group-item">
+              <span class="title">Peso: </span>
+              <span class="subtitle">{{ turno.history?.weight }} </span>
+            </li>
+
+            <li class="list-group-item">
+              <span class="title">Temperatura: </span>
+              <span class="subtitle">{{ turno.history?.temperature }} </span>
+            </li>
+
+            <li class="list-group-item">
+              <span class="title">Presión: </span>
+              <span class="subtitle">{{ turno.history?.pressure }} </span>
+            </li>
+
+            <li class="list-group-item">
+              <button
+                class="btn btn-primary"
+                (click)="
+                  getHistory(turno.paciente.email, turno.especialista.email)
+                "
+              >
+                Detalles
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PARA EL PDF -->
+<div
+  class="container card-body card"
+  *ngIf="this.action == 'Detailes' && this.list$ | async"
+  
+>
+  <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+  <div class="row" id="htmlData">
+    <div>
+      <h6 style="text-align: right">
+        Historia Clínica de {{ this.list[0].paciente.surname }},
+        {{ this.list[0].paciente.name }}
+      </h6>
+
+      <table class="table table-bordered mt-4" *ngFor="let tur of this.list">
+        <thead>
+          <tr class="table-primary">
+            <th>Especialista</th>
+            <th>Comentario Especialista</th>
+            <th>Altura</th>
+            <th>Peso</th>
+            <th>Temperatura</th>
+            <th>Presión</th>
+            <th *ngIf="tur.history?.others[0]">
+              {{ tur.history.others[0].clave }}
+            </th>
+            <th *ngIf="tur.history?.others[1]">
+              {{ tur.history.others[1].clave }}
+            </th>
+            <th *ngIf="tur.history?.others[2]">
+              {{ tur.history.others[2].clave }}
+            </th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ tur.especialista.surname }}, {{ tur.especialista.name }}</td>
+            <td>{{ tur.commentEspecialista }}</td>
+            <td>{{ tur.history?.height }}</td>
+            <td>{{ tur.history?.weight }}</td>
+            <td>{{ tur.history?.temperature }}</td>
+            <td>{{ tur.history?.pressure }}</td>
+            <td *ngIf="tur.history?.others[0]">
+              {{ tur.history.others[0].valor }}
+            </td>
+            <td *ngIf="tur.history?.others[1]">
+              {{ tur.history.others[1].valor }}
+            </td>
+            <td *ngIf="tur.history?.others[2]">
+              {{ tur.history.others[2].valor }}
+            </td>
+            <td>{{ tur.time_updated.toDate() | date: 'dd/MM/yyyy HH:mm' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <button
+    *ngIf="this.user.user"
+    id="btn-download"
+    class="btn btn-success"
+    (click)="getHistoryPDF()"
+  >
+    Descargar
+  </button>
+</div>

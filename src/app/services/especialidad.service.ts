@@ -1,29 +1,41 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { ToastrService } from 'ngx-toastr';
+import { map } from 'rxjs/operators';
+import { Especialidad } from '../models/especialidad';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EspecialidadService {
 
+  referenceToCollection: AngularFirestoreCollection;
   pathOfCollection = '/clinica-esp';
 
-  constructor(private db: AngularFirestore) { }
+  constructor(
+    private toastr: ToastrService,
+    private db: AngularFirestore
+  ) {
+    this.referenceToCollection = this.db.collection(this.pathOfCollection, ref => ref.orderBy('name', 'asc'));
+  }
 
   add(data: any) {
     try {
-      const newData = { id: this.db.createId(), name: data }
-      return this.db.collection(this.pathOfCollection).add({ ...newData });  //  llaves es objeto, 3 puntitos es dinamico
+      data.id = this.db.createId();
+      this.referenceToCollection.doc(data.id).set({ ...data });
+      this.toastr.success('Agregado con Exito!', 'Estado Especialidad');
     }
     catch (error) {
-      console.log((error));
+      this.toastr.error('Error al momento de agregar especialidad..', 'Estado Especialidad');
     }
   }
 
   getAll() {
     try {
-      return this.db.collection<any>(this.pathOfCollection, ref => ref.orderBy('name', 'asc'));
+      return this.referenceToCollection.snapshotChanges().pipe(
+        map(actions => actions.map(a => a.payload.doc.data() as Especialidad))
+      );
     }
-    catch (error) { }
+    catch (error) { this.toastr.error('Error at the moment to get especialidades..', 'Data especialidades'); }
   }
 }

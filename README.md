@@ -1,27 +1,100 @@
-# ClininaOnline
+# ClinicaOnline
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.6.
+Segundo parcial Laboratorio 4 UTN FRA
 
-## Development server
+Puedes probar el funcionamiento del sistema en: https://angular-clinica.web.app/
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Primeros pasos en la clinica
 
-## Code scaffolding
+En primer lugar te encontraras con la login page, donde si eres un nuevo usuario puedes dirigirte al registro o de lo contrario a iniciar sesion
+Este es el único lugar donde podrá cambiar el lenguaje del sitio web (Español, Ingles, Portugues)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+### Administracion (Admin)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Aqui podra acceder el administrador, puede ejecutar acciones como:
 
-## Running unit tests
+## Listar Turnos
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Veras todos los turnos que hubo
 
-## Running end-to-end tests
+## Añadir Turno
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Podrá registrar un nuevo turno seleccionando Especialista y Paciente
 
-## Further help
+## Pacientes
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Veras todos los pacientes con su historia clínica
+
+## Comentarios
+
+Veras todos los comentarios que hubo
+
+## Reportes
+
+Veras los ingresos al sistema por parte de Especialistas en un determinado tiempo
+
+Veras la cantidad de operaciones por Especialidad en todo el transcurso del tiempo
+
+Veras la cantidad de días que trabajaron cada Especialista en un determinado tiempo
+
+## Usuarios
+
+Veras todos los usuarios dentro del sistema, divididos en sus respectivas categorías
+
+Se podra habilitar/deshabilitar especialistas en el sistema
+
+Podrá agregar un nuevo administrador en categoría Administradores
+
+## Añadir Adm
+
+Sólo aqui se podra registrar usuarios de tipo Administrador
+
+### Especialista
+
+## Mis Turnos
+
+Verás los turnos que tienes o tenías disponible
+
+## Pacientes
+
+Verás la historia clinica de los pacientes que en algún momento tuviste
+
+## Comentarios
+
+Verás los comentarios que recibiste por parte de los pacientes
+
+### Pacientes
+
+## Mis Turnos
+
+Verás los turnos que tienes o tenías disponible
+
+## Añadir Turno
+
+Podrás generar un nuevo turno
+
+## Comentarios
+
+Verás los comentarios de todos los Especialistas
+
+### Data de Usuarios
+
+## ADMIN
+    rociocabb98@gmail.com  
+    bauti98k@gmail.com  
+
+
+## PACIENTE
+    paciente@paciente.com
+    agusszurdob@gmail.com
+    staff98k@gmail.com
+
+
+## ESPECIALISTA
+    jose98k@gmail.com
+    especialista@especialista.com
+    cami98k@gmail.com
+
+## PASSWORDS
+    acer1234

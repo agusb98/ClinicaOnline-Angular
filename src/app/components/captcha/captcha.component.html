@@ -1,0 +1,16 @@
+<div class="container" id="container">
+  <div class="container-btn">
+    <button class="btn btn-success" (click)="resetForm()">🎲</button>
+  </div>
+  <span>{{ this.key }}</span>
+  <form [formGroup]="formCaptcha">
+    <input
+      type="text"
+      class="form-control"
+      id="recaptcha"
+      placeholder="{{ 'Ingrese' | translate }} {{ 'Código' | translate }}.."
+      formControlName="recaptcha"
+      (change)="getResult()"
+    />
+  </form>
+</div>

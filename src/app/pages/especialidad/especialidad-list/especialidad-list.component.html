@@ -1,0 +1,42 @@
+<div class="body" id="body">
+  <div class="container">
+    <h2 style="text-align: center">{{'Listado' | translate}}  {{'Especialidades' | translate}}</h2>
+
+    <table class="table table-dark mydatatable" style="text-align: left">
+      <tbody class="tbodyFilm">
+        <td>
+          <input
+            id="input-name"
+            type="text"
+            class="form-control"
+            placeholder="{{'Ingrese' | translate}}  {{'Nombre' | translate}}.."
+          />
+        </td>
+        <td>
+          <button
+            id="button-add-esp"
+            class="btn btn-success mt-2 mb-2"
+            (click)="onClickAdd()"
+          >
+          {{'Buscar' | translate}}
+          </button>
+
+        </td>
+        <tr *ngFor="let especialidad of list$ | async">
+          <td>
+            {{ especialidad.name }}
+          </td>
+          <td>
+            <button
+              id="button-select-esp-{{ especialidad.id }}"
+              class="btn btn-primary mt-2 mb-2"
+              (click)="onClickEspecialidad(especialidad)"
+            >
+            {{'Seleccionar' | translate}}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

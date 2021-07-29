@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies":["lodash"],
             "outputPath": "dist/ClininaOnline",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -21,7 +22,10 @@
             "aot": true,
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["node_modules/ngx-toastr/toastr.css", "src/styles.css"],
-            "scripts": []
+            "scripts": [
+              "node_modules/html2canvas/dist/html2canvas.min.js",
+              "node_modules/jspdf/dist/jspdf.min.js"
+            ]
           },
           "configurations": {
             "production": {

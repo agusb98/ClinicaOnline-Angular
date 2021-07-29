@@ -1,0 +1,66 @@
+<div class="container p-4 text-center row mx-auto card text-center">
+  <div class="card-header">
+    <h3>Finalización de Turno</h3>
+
+    <form [formGroup]="formFinish" (ngSubmit)="onFinish()">
+      <input
+        type="text"
+        class="form-control"
+        id="comment"
+        placeholder="Ingrese Comentario.."
+        formControlName="comment"
+      />
+      <div *ngFor="let error of errorMessages.comment">
+        <ng-container
+          *ngIf="
+            comment.hasError(error.type) && (comment.dirty || comment.touched)
+          "
+        >
+          <small class="error-message">{{ error.message }}</small>
+        </ng-container>
+      </div>
+
+      <input
+        type="text"
+        class="form-control"
+        id="diagnostic"
+        placeholder="Ingrese Diagnóstico.."
+        formControlName="diagnostic"
+      />
+      <div *ngFor="let error of errorMessages.diagnostic">
+        <ng-container
+          *ngIf="
+            diagnostic.hasError(error.type) &&
+            (diagnostic.dirty || diagnostic.touched)
+          "
+        >
+          <small class="error-message">{{ error.message }}</small>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+  <div class="form-group">
+    <button
+      id="btn-acept"
+      class="btn btn-success btn-lg btn-block"
+      type="submit"
+      class="btn btn-success btn-block"
+      style="cursor: pointer"
+      (click)="onFinish()"
+      [disabled]="formFinish.invalid"
+    >
+      Finalizar
+    </button>
+
+    <button
+      id="btn-cancel"
+      class="btn btn-warning btn-lg btn-block"
+      type="submit"
+      class="btn btn-warning btn-block"
+      style="cursor: pointer"
+      (click)="onBack()"
+    >
+      Cancelar
+    </button>
+  </div>
+</div>

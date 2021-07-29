@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -9,11 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./user-login.component.css'],
   providers: [AuthService]
 })
-export class UserLoginComponent {
-
-  usuarioSeleccionado: any;
-
-  listadoUsuarios = [];
+export class UserLoginComponent implements OnInit {
 
   inicioRapido: boolean = false;
 
@@ -22,10 +18,16 @@ export class UserLoginComponent {
     password: new FormControl('', Validators.required),
   });
 
+  langs: string[] = [];
+
   constructor(
     private authService: AuthService,
-    private router: Router
+    private translate: TranslateService
   ) { }
+
+  ngOnInit(): void {
+    this.getLangs();
+  }
 
   btnIndex() {
     if (this.inicioRapido) { this.inicioRapido = false; }
@@ -43,21 +45,31 @@ export class UserLoginComponent {
   onLogin() {
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password);
-    { this.router.navigate(['home']); }
   }
 
-  quickLog(str) {
+  quickLog(str: string) {
     this.password = 'acer1234';
     switch (str) {
-      case 'Administrador':
-        this.email = 'agusszurdob@gmail.com';
+      case 'Paciente':
+        this.email = 'paciente@paciente.com';
         break;
       case 'Especialista':
         this.email = 'especialista@especialista.com';
         break;
-      case 'Paciente':
-        this.email = 'carlitos@gmail.com';
+      case 'Administrador':
+        this.email = 'rociocabb98@gmail.com';
         break;
     }
   }
+
+  getLangs() {
+    this.translate.addLangs(['en', 'es', 'po']);
+    this.langs = this.translate.getLangs();
+  }
+
+  changeLang(lang: string) {
+    this.translate.use(lang);
+    localStorage.setItem('language', lang);
+  }
+
 }

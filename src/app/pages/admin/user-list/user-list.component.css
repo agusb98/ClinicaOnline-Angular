@@ -1,11 +1,18 @@
-.img-principal-photo{
-    width: 7rem;
-    height: 5rem;
+.img-principal-photo {
+  width: 7rem;
+  height: 5rem;
 }
 
-.btn-user{
-    margin-left: 11rem;
+.btn-user {
+  margin-left: 11rem;
 }
-.btn-user-add{
-    margin-left: 3.2rem;
+.btn-user-add {
+  margin-left: 3.2rem;
+}
+
+.div-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0.5rem;
 }

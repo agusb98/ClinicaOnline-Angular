@@ -1,7 +1,10 @@
 <div class="body" id="body">
   <div class="container" *ngIf="this.comment">
     <div *ngIf="this.turno">
-      <h1 style="text-align: center">Comentarios Recibidos</h1>
+      <h1 style="text-align: center">
+        Comentario de {{ this.comment.paciente.surname }},
+        {{ this.comment.paciente.name }}
+      </h1>
 
       <div class="container-select-esp">
         <table class="table table-dark mydatatable" style="text-align: left">
@@ -11,7 +14,8 @@
               <th>Paciente</th>
               <th>Comentario</th>
               <th>Calificación</th>
-              <th>Cuestionario</th>
+              <th>Cuestionario 1</th>
+              <th>Cuestionario 2</th>
             </tr>
           </thead>
           <tbody class="tbodyFilm">
@@ -25,16 +29,17 @@
               </td>
 
               <td *ngIf="this.comment.comment">{{ this.comment.comment }}</td>
-              <td *ngIf="!this.comment.comment">-</td>
-              <td *ngIf="this.comment.qualify">{{ this.comment.qualify }}</td>
-              <td *ngIf="!this.comment.qualify">-</td>
-              <td *ngIf="this.comment.survey.recommend">
+              <td *ngIf="!this.comment.comment">sin respuesta</td>
+              <td *ngIf="this.comment.qualify">{{ this.qualify }}</td>
+              <td *ngIf="!this.comment.qualify">sin respuesta</td>
+              <td *ngIf="this.comment.recommend">
                 Recomienda: {{ this.comment.survey.recommend }}
               </td>
-              <td *ngIf="this.comment.survey.recommend">
+               <td *ngIf="!this.comment.recommend">Recomienda: sin respuesta</td>
+              <td *ngIf="this.comment.survey">
                 Atención: {{ this.comment.survey.atention }}
               </td>
-              <td *ngIf="!this.comment.survey.recommend">-</td>
+              <td *ngIf="!this.comment.survey">Atención: sin respuesta</td>
             </tr>
           </tbody>
         </table>

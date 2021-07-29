@@ -1,0 +1,53 @@
+.container-select-esp {
+  width: 100%;
+}
+
+.container-buttons {
+  margin-bottom: 1%;
+  display: flex;
+  height: min;
+}
+
+#btn-filter {
+  margin: 0%;
+}
+#btn-refresh {
+  margin: 0%;
+  margin-right: 58.5%;
+}
+#btn-add {
+  margin: 0%;
+}
+#btn-back {
+  background-color: transparent;
+  border: none;
+  margin-left: 96.5%;
+  font-size: 1.5rem;
+  height: 2.6rem;
+}
+
+small {
+  color: red;
+}
+
+.filter {
+  margin-right: 0.5rem;
+  width: 18rem;
+  margin-top: 0.4rem;
+}
+
+#no-turnos {
+  background-color: red;
+  position: relative;
+  color: black;
+}
+
+#td-status {
+  color: rgb(243, 88, 88);
+  text-decoration-line: underline;
+  font-style: oblique;
+}
+
+.form-control {
+  margin-bottom: 0.5rem;
+}

@@ -2,27 +2,30 @@
   <div class="container">
     <h1 style="text-align: center">Listado Usuarios</h1>
 
-    <div class="col div-buttons">
+    <div class="div-buttons">
       <button
+        *ngIf="this.kyndUser != 'PACIENTE'"
         class="btn btn-user btn-primary mt-2 mb-2"
-        (click)="showPacientes()"
+        (click)="getUsers('PACIENTE')"
       >
         Pacientes
       </button>
       <button
+        *ngIf="this.kyndUser != 'ESPECIALISTA'"
         class="btn btn-user btn-primary mt-2 mb-2"
-        (click)="showEspecialista()"
+        (click)="getUsers('ESPECIALISTA')"
       >
         Especialistas
       </button>
       <button
+        *ngIf="this.kyndUser != 'ADMINISTRADOR'"
         class="btn btn-user btn-primary mt-2 mb-2"
-        (click)="showAdministradores()"
+        (click)="getUsers('ADMINISTRADOR')"
       >
         Administradores
       </button>
       <button
-        *ngIf="this.onlyAdmin"
+        *ngIf="this.kyndUser == 'ADMINISTRADOR'"
         class="btn btn-user-add btn-success mt-2 mb-2"
         routerLink="/admin/add"
       >
@@ -30,7 +33,7 @@
       </button>
     </div>
 
-    <div *ngIf="this.onlyAdmin">
+    <div *ngIf="this.kyndUser == 'ADMINISTRADOR'">
       <table class="table table-dark mydatatable" style="text-align: left">
         <thead>
           <tr>
@@ -44,7 +47,7 @@
           </tr>
         </thead>
         <tbody class="tbodyFilm">
-          <tr *ngFor="let user of this.listAdmins">
+          <tr *ngFor="let user of this.list$ | async">
             <td>{{ user.name }}</td>
             <td>{{ user.surname }}</td>
             <td>{{ user.age }}</td>
@@ -57,7 +60,7 @@
       </table>
     </div>
 
-    <div *ngIf="this.onlyEspecialista">
+    <div *ngIf="this.kyndUser == 'ESPECIALISTA'">
       <table class="table table-dark mydatatable" style="text-align: left">
         <thead>
           <tr>
@@ -73,14 +76,18 @@
           </tr>
         </thead>
         <tbody class="tbodyFilm">
-          <tr *ngFor="let user of this.listEspecialistas">
+          <tr *ngFor="let user of this.list$ | async">
             <td>{{ user.name }}</td>
             <td>{{ user.surname }}</td>
             <td>{{ user.age }}</td>
             <td>{{ user.dni }}</td>
             <td>{{ user.email }}</td>
             <td><img src="{{ user.photo }}" class="img-principal-photo" /></td>
-            <td>{{ user.especialidad }}</td>
+            <td>
+              <span *ngFor="let esp of user.especialidad">
+                {{ esp.name }}
+              </span>
+            </td>
             <td>{{ user.user }}</td>
             <td>
               <button
@@ -103,7 +110,7 @@
       </table>
     </div>
 
-    <div *ngIf="this.onlyPaciente">
+    <div *ngIf="this.kyndUser == 'PACIENTE'">
       <table class="table table-dark mydatatable" style="text-align: left">
         <thead>
           <tr>
@@ -119,7 +126,7 @@
           </tr>
         </thead>
         <tbody class="tbodyFilm">
-          <tr *ngFor="let user of this.listPacientes">
+          <tr *ngFor="let user of this.list$ | async">
             <td>{{ user.name }}</td>
             <td>{{ user.surname }}</td>
             <td>{{ user.age }}</td>

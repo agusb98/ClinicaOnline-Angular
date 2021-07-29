@@ -1,36 +1,145 @@
-<div class="container-fluid">
-  <div class="mt-3">
-    <div class="row" *ngIf="user">
-      <div class="col-md-3">
-        <div class="card">
-          <span class="border border"></span>
-          <img [src]="user.photo" alt="" class="rounded-circle img-fluid" />
-          <img *ngIf="this.user.user == Paciente" [src]="user.photo2" alt="" class="rounded-circle img-fluid img-photo-secondary" />
-          <div class="card-body">
-            <h4 class="card-title">{{ user.name }} {{ user.surname }}</h4>
-            <p class="card-text">{{ user.age }} años</p>
-          </div>
+<div class="container-fluid" *ngIf="this.action == ''">
+  <h1>{{ "Datos personales" | translate }}</h1>
+  <div class="row" *ngIf="this.user$ | async">
+    <div class="col-md-4">
+      <div class="card">
+        <span class="border border"></span>
+        <img [src]="userData.photo" class="img-fluid" />
+        <img
+          *ngIf="this.userData.user == 'PACIENTE'"
+          [src]="userData.photo2"
+          class="rounded-circle img-fluid img-photo-secondary"
+        />
+        <div class="card-body" style="text-align: center">
+          <h4 class="card-title title">
+            {{ userData.name }} {{ userData.surname }}
+          </h4>
+          <p class="card-text">{{ userData.age }} {{ "Años" | translate }}</p>
         </div>
       </div>
-      <div class="col-md-8 align-self-center">
-        <div class="card">
-          <div class="card-body">
-            <ul class="list-group">
-              <li class="list-group-item">
-                Usuario: {{ user.user }}
-              </li>
-              <li *ngIf="this.user.user == 'Especialista'" class="list-group-item">
-                Especialista en: {{ user.especialidad }}
-              </li>
-              <li *ngIf="this.user.user == 'Paciente'" class="list-group-item">
-                Obra Social: {{ user.obra_social }}
-              </li>
-              <li class="list-group-item">DNI: {{ user.dni }}</li>
-              <li class="list-group-item">Email: {{ user.email }}</li>
-            </ul>
-          </div>
+    </div>
+    <div class="col-md-8 align-self-center">
+      <div class="card">
+        <div class="card-body">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="title">{{ "Usuario" | translate }}: </span>
+              <span class="subtitle">{{ userData.user }} </span>
+            </li>
+
+            <li
+              class="list-group-item"
+              *ngIf="this.userData.user == 'ESPECIALISTA'"
+            >
+              <span class="title">{{ "Especialidad" | translate }}: </span>
+              <div *ngFor="let esp of this.userData.especialidad">
+                <span class="subtitle">_{{ esp.name }} </span>
+              </div>
+            </li>
+
+            <li
+              class="list-group-item"
+              *ngIf="this.userData.user == 'ESPECIALISTA'"
+            >
+              <span class="title"
+                >{{ "Horarios de atención" | translate }}:
+              </span>
+              <span class="subtitle"
+                >{{ this.userData.schedule.start }}hs a
+                {{ this.userData.schedule.end }}hs
+              </span>
+            </li>
+
+            <li
+              *ngIf="this.userData.user == 'PACIENTE'"
+              class="list-group-item"
+            >
+              <span class="title">{{ "Obra social" | translate }}: </span>
+              <span class="subtitle">{{ userData.obra_social }} </span>
+            </li>
+
+            <li class="list-group-item">
+              <span class="title">DNI: </span>
+              <span class="subtitle">{{ userData.dni }} </span>
+            </li>
+
+            <li class="list-group-item">
+              <span class="title">{{ "Correo" | translate }}: </span>
+              <span class="subtitle">{{ userData.email }} </span>
+            </li>
+
+            <li
+              class="list-group-item"
+              *ngIf="this.userData.user == 'PACIENTE'"
+            >
+              <span class="title">{{ "Historia Clínica" | translate }}: </span>
+              <button class="btn btn-warning" (click)="getHistory()">
+                {{ "Ver" | translate }}
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- PARA EL PDF -->
+<div
+  class="container card-body card"
+  *ngIf="this.turnos && this.action == 'Download'"
+  style="min-width: 70rem; max-height: 56.6rem; overflow: scroll"
+>
+  <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+  <div id="htmlData" class="row">
+    <div>
+      <h6 style="text-align: right">
+        {{ "Historia Clínica" | translate }} {{ "de" | translate }}
+        {{ this.turnos[0].paciente.surname }},
+        {{ this.turnos[0].paciente.name }}
+      </h6>
+
+      <table class="table table-bordered mt-4" *ngFor="let tur of this.turnos">
+        <tr class="table-primary">
+          <th>{{ "Especialista" | translate }}</th>
+          <th>{{ "Comentario Especialista" | translate }}</th>
+          <th>{{ "Altura" | translate }}</th>
+          <th>{{ "Peso" | translate }}</th>
+          <th>{{ "Temperatura" | translate }}</th>
+          <th>{{ "Presión" | translate }}</th>
+          <th *ngIf="tur.history?.others[0]">
+            {{ tur.history.others[0].clave }}
+          </th>
+          <th *ngIf="tur.history?.others[1]">
+            {{ tur.history.others[1].clave }}
+          </th>
+          <th *ngIf="tur.history?.others[2]">
+            {{ tur.history.others[2].clave }}
+          </th>
+          <th>{{ "Fecha" | translate }}</th>
+        </tr>
+        <tr>
+          <th>{{ tur.especialista.surname }}, {{ tur.especialista.name }}</th>
+          <th>{{ tur.commentEspecialista }}</th>
+          <th>{{ tur.history.height }}</th>
+          <th>{{ tur.history.weight }}</th>
+          <th>{{ tur.history.temperature }}</th>
+          <th>{{ tur.history.pressure }}</th>
+          <th *ngIf="tur.history?.others[0]">
+            {{ tur.history.others[0].valor }}
+          </th>
+          <th *ngIf="tur.history?.others[1]">
+            {{ tur.history.others[1].valor }}
+          </th>
+          <th *ngIf="tur.history?.others[2]">
+            {{ tur.history.others[2].valor }}
+          </th>
+          <th>25/09/2021</th>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <button id="btn-download" class="btn btn-success" (click)="getHistoryPDF()">
+    {{ "Descargar" | translate }}
+  </button>
 </div>

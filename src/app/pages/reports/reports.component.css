@@ -1,0 +1,35 @@
+span {
+  font-weight: bolder;
+}
+
+#btn-back {
+  background-color: transparent;
+  border: none;
+  margin-left: 64rem;
+  height: 2.6rem;
+  width: 2.5rem;
+}
+
+#btn-download {
+  margin-left: 59.5rem;
+  width: 7rem;
+}
+
+.container {
+  text-align: center;
+}
+
+.form-control {
+  margin-bottom: 0.5rem;
+}
+
+.header{
+  text-align: center;
+}
+
+.row{
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

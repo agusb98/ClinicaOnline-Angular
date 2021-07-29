@@ -1,0 +1,54 @@
+.filter {
+  width: 42%;
+}
+
+#btn-filter {
+  width: 4.9rem;
+  position: absolute;
+  top: 0rem;
+  right: 15rem;
+}
+
+input,
+select {
+  margin-bottom: 0.8rem;
+}
+
+small {
+  color: red;
+}
+
+select {
+  cursor: pointer;
+}
+
+.container {
+  min-height: 24rem;
+}
+
+.card-header {
+  top: auto;
+  position: absolute;
+  width: 40%;
+  background-color: whitesmoke;
+}
+
+.container-select-esp {
+  top: auto;
+  width: 36rem;
+  margin: 0rem;
+  height: auto;
+  left: 44.5%;
+  position: relative;
+}
+
+#btn-back{
+  background-color: transparent;
+  border: none;
+  margin-left: 96.5%;
+  font-size: 1.5rem;
+  height: 2.6rem;
+  position: absolute;
+  top: 0;
+  right: 0.0%;
+}

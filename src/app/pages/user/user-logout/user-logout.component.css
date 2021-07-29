@@ -1,4 +1,13 @@
-h3{
-    color: whitesmoke;
-    text-align:center;
+span{
+    font-size: 1.51rem;
+    font-family: Roboto;
+    font-weight: bold;
+    font-style: italic;
+    letter-spacing: 6px;
+    color: #4416c4;
+    background-color: #e3e3e3;
+}
+
+.btn{
+    margin-top: 0.8rem;
 }

@@ -1,28 +1,36 @@
-<div class="body" id="body">
-  <div class="container" *ngIf="this.listComments">
-    <div *ngIf="!this.turno">
+<div class="body" id="body" *ngIf="this.list$ | async">
+  <div class="container" *ngIf="this.list">
+    <div
+      *ngIf="!this.turno"
+      style="min-width: 70rem; max-height: 56.6rem; overflow: scroll"
+    >
       <h1 style="text-align: center">Comentarios</h1>
       <div class="container-select-esp">
         <table class="table table-dark mydatatable" style="text-align: left">
           <thead>
             <tr>
               <th>Paciente</th>
-              <th>Especialista</th>
-              <th>Especialidad</th>
               <th>Comentario</th>
+              <th>Especialista</th>
+              <th>Comentario</th>
+              <th>Especialidad</th>
+              <th>Calificación</th>
+              <th>Fecha</th>
             </tr>
           </thead>
           <tbody class="tbodyFilm">
-            <tr *ngFor="let comment of this.listComments">
+            <tr *ngFor="let turno of this.list">
+              <td>{{ turno.paciente.surname }}, {{ turno.paciente.name }}</td>
+              <td>{{ turno.commentPaciente }}</td>
               <td>
-                {{ comment.paciente.surname }}, {{ comment.paciente.name }}
+                {{ turno.especialista.surname }},
+                {{ turno.especialista.name }}
               </td>
-              <td>
-                {{ comment.especialista.surname }},
-                {{ comment.especialista.name }}
-              </td>
-              <td>{{ comment.especialista.especialidad }}</td>
-              <td>{{ comment.comment }}</td>
+              <td>{{ turno.commentEspecialista }}</td>
+              <td>{{ turno.especialista.especialidad.name }}</td>
+              <td *ngIf="turno.qualify">{{ turno.qualify[0].atention }}</td>
+              <td *ngIf="!turno.qualify">-</td>
+              <td>{{ turno.time_updated | date: "dd/MM/yyyy" }}</td>
             </tr>
           </tbody>
         </table>
@@ -35,6 +43,14 @@
         {{ this.turno[0].especialista.name }}
       </h1>
 
+      <div
+        class="container-select-esp"
+        *ngIf="!this.list[0]"
+        style="text-align: center"
+        id="no-comments"
+      >
+        El especialista no tiene comentarios hasta la fecha
+      </div>
       <div class="container-select-esp">
         <table class="table table-dark mydatatable" style="text-align: left">
           <thead>
@@ -46,13 +62,13 @@
             </tr>
           </thead>
           <tbody class="tbodyFilm">
-            <tr *ngFor="let comment of this.listComments">
+            <tr *ngFor="let comment of this.list">
               <td>
                 {{ comment.paciente.surname }}, {{ comment.paciente.name }}
               </td>
               <td>{{ comment.comment }}</td>
-              <td><app-qualify-get></app-qualify-get></td>
-              <td><app-survey-get></app-survey-get></td>
+              <td>{{ comment.qualify }}</td>
+              <td>{{ comment.survey }}</td>
             </tr>
           </tbody>
         </table>

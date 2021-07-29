@@ -1,4 +1,8 @@
-#btn-quicklog{
+#btn-Paciente, #btn-Administrador, #btn-Especialista{
     width: 50%;
     height: 60%;
+}
+
+.custom-select{
+    margin-top: 1px;
 }

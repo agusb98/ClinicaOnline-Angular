@@ -1,0 +1,715 @@
+<div class="body" id="body">
+  <div
+    class="container"
+    *ngIf="(this.user$ | async) && this.flagComponent == ''"
+  >
+    <h1 style="text-align: center">Mis Turnos</h1>
+
+    <!-- Solo para usuarios tipo Administrador o Paciente -->
+    <div class="container-buttons" *ngIf="this.user.user != 'ESPECIALISTA'">
+      <form [formGroup]="formGroup" (ngSubmit)="onFilter()">
+        <input
+          id="form-filter-text"
+          type="text"
+          formControlName="filter"
+          class="form-control filter"
+          placeholder="Filtrar.."
+        />
+      </form>
+
+      <button
+        id="btn-filter"
+        class="btn btn-primary mt-2 mb-2"
+        type="submit"
+        style="cursor: pointer"
+        (click)="onFilter()"
+      >
+        🔎
+      </button>
+
+      <button
+        id="btn-refresh"
+        class="btn btn-warning mt-2 mb-2"
+        type="submit"
+        style="cursor: pointer"
+        (click)="getTurnosByUser()"
+      >
+        🧹
+      </button>
+
+      <button
+        *ngIf="
+          this.user.user == 'PACIENTE' || this.user.user == 'ADMINISTRADOR'
+        "
+        id="btn-add"
+        (click)="clean()"
+        class="btn btn-success mt-2 mb-2"
+        (click)="onAdd()"
+      >
+        ➕
+      </button>
+    </div>
+
+    <!-- Listado de Turnos -->
+    <!-- Vista de Paciente -->
+
+    <div class="container-select-esp">
+      <table class="table table-dark mydatatable" style="text-align: left">
+        <thead>
+          <tr>
+            <th>Especialista</th>
+            <th>Paciente</th>
+            <th>Especialidad</th>
+            <th>Fecha Programada</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody class="tbodyFilm">
+          <tr *ngFor="let turno of this.listTurnos$ | async">
+            <td>
+              {{ turno.especialista.surname }}, {{ turno.especialista.name }}
+            </td>
+            <td>{{ turno.paciente.surname }}, {{ turno.paciente.name }}</td>
+            <td>{{ turno.especialista.especialidad.name }}</td>
+            <td>
+              {{ turno.schedule.toDate() | date: 'dd/MM/yyyy HH:mm' }}
+            </td>
+            <td id="td-status">{{ turno.status }}</td>
+
+            <td *ngIf="turno.status == 'Pendiente'">
+              <button
+                *ngIf="
+                  this.user.user == 'PACIENTE' ||
+                  this.user.user == 'ADMINISTRADOR'
+                "
+                class="btn btn-danger btn-block"
+                style="cursor: pointer"
+                (click)="onCancel(turno)"
+              >
+                ❌ Cancelar
+              </button>
+
+              <button
+                *ngIf="this.user.user == 'ESPECIALISTA'"
+                class="btn btn-success btn-block"
+                style="cursor: pointer"
+                (click)="onAcept(turno)"
+              >
+                ✔️ Aceptar
+              </button>
+
+              <button
+                *ngIf="this.user.user == 'ESPECIALISTA'"
+                class="btn btn-danger btn-block"
+                style="cursor: pointer"
+                (click)="onRefuse(turno)"
+              >
+                ❗ Rechazar
+              </button>
+
+              <button
+                *ngIf="
+                  this.user.user == 'PACIENTE' ||
+                  this.user.user == 'ADMINISTRADOR'
+                "
+                class="btn btn-warning btn-block"
+                style="cursor: pointer"
+                (click)="onShowComments(turno)"
+              >
+                📝 Comentarios
+              </button>
+            </td>
+
+            <td *ngIf="turno.status == 'Aceptado'">
+              <button
+                *ngIf="
+                  this.user.user == 'PACIENTE' ||
+                  this.user.user == 'ADMINISTRADOR' ||
+                  this.user.user == 'ADMINISTRADOR'
+                "
+                class="btn btn-danger btn-block"
+                style="cursor: pointer"
+                (click)="onCancel(turno)"
+              >
+                ❌ Cancelar
+              </button>
+
+              <button
+                *ngIf="this.user.user == 'ESPECIALISTA'"
+                class="btn btn-danger btn-block"
+                style="cursor: pointer"
+                (click)="onFinish(turno)"
+              >
+                ❕ Finalizar
+              </button>
+
+              <button
+                *ngIf="
+                  this.user.user == 'PACIENTE'
+                "
+                class="btn btn-warning btn-block"
+                style="cursor: pointer"
+                (click)="onShowComments(turno)"
+              >
+                📝 Comentarios
+              </button>
+            </td>
+
+            <td *ngIf="turno.status == 'Finalizado'">
+              <button
+                *ngIf="
+                  (this.user.user == 'ADMINISTRADOR' ||
+                    this.user.user == 'PACIENTE') &&
+                  turno.commentEspecialista &&
+                  !turno.survey
+                "
+                class="btn btn-success btn-block"
+                style="cursor: pointer"
+                (click)="onSurvey(turno)"
+              >
+                ➕ Encuesta
+              </button>
+              <button
+                *ngIf="
+                  (this.user.user == 'ADMINISTRADOR' ||
+                    this.user.user == 'PACIENTE') &&
+                  turno.survey &&
+                  !turno.qualify
+                "
+                class="btn btn-success btn-block"
+                style="cursor: pointer"
+                (click)="onQualify(turno)"
+              >
+                ➕ Calificar
+              </button>
+
+              <button
+                *ngIf="
+                  (this.user.user == 'ESPECIALISTA' ||
+                    this.user.user == 'ADMINISTRADOR') &&
+                  (turno.commentPaciente || turno.survey)
+                "
+                class="btn btn-warning btn-block"
+                style="cursor: pointer"
+                (click)="onShowComment(turno)"
+              >
+                📝 Comentario
+              </button>
+
+              <button
+                *ngIf="
+                  this.user.user == 'ESPECIALISTA' && turno.history == null
+                "
+                class="btn btn-success btn-block"
+                style="cursor: pointer"
+                (click)="onAddHistory(turno)"
+              >
+                ➕ Historia Clínica
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Permite ver comentarios, reseñas, encuestas y calificacion de un especialista -->
+  <div class="body" id="body" *ngIf="this.flagComponent == 'Comment'">
+    <div class="container" style="min-width: 50rem; max-height: 52rem; overflow: scroll;">
+      <h1 style="text-align: center">Comentarios</h1>
+
+      <div class="container-select-esp">
+        <button
+          class="btn btn-danger"
+          id="btn-back"
+          (click)="this.flagComponent = ''"
+        >
+          X
+        </button>
+        <table class="table table-dark mydatatable" style="text-align: left">
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Comentario: Paciente</th>
+              <th>Reseña</th>
+              <th>Puntaje Atención</th>
+              <th>Comentario Recomendación</th>
+              <th>Comentario Solucionado</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody class="tbodyFilm">
+            <tr>
+              <td>
+                {{ turnoSelected.paciente.surname }},
+                {{ turnoSelected.paciente.name }}
+              </td>
+              <td>
+                {{ turnoSelected.commentPaciente | isEmpty: "Comentario" }}
+              </td>
+              <td>
+                {{ turnoSelected.commentEspecialista | isEmpty: "Reseña" }}
+              </td>
+              <td>
+                {{ turnoSelected.qualify[0].atention | isEmpty: "Atención" }}
+              </td>
+              <td>
+                {{ turnoSelected.survey[0].recommend | isEmpty: "Encuesta" }}
+              </td>
+              <td>{{ turnoSelected.survey[1].fixed | isEmpty: "Encuesta" }}</td>
+              <td>{{ turnoSelected.time_updated | date: 'dd/MM/yyyy HH:mm' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Permite ver los comentarios, reseñas, encuestas y calificacion de un Especialista -->
+  <div class="body" id="body" *ngIf="this.flagComponent == 'Comments'">
+    <div class="container">
+      <h1 style="text-align: center">Comentarios</h1>
+
+      <div class="container-select-esp">
+        <button
+          class="btn btn-danger"
+          id="btn-back"
+          (click)="this.flagComponent = ''"
+        >
+          X
+        </button>
+        <table class="table table-dark mydatatable" style="text-align: left">
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Especialista</th>
+              <th>Comentario: Paciente</th>
+              <th>Comentario: Especialista</th>
+              <th>Atención Recibida</th>
+              <th>Recomendación</th>
+              <th>Problema</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody class="tbodyFilm">
+            <tr *ngFor="let turno of this.filterTurnos">
+              <td>{{ turno.paciente.surname }}, {{ turno.paciente.name }}</td>
+              <td>
+                {{ turno.especialista.surname }},
+                {{ turno.especialista.name }}
+              </td>
+              <td>{{ turno.commentPaciente | isEmpty: "Comentario" }}</td>
+              <td>{{ turno.commentEspecialista | isEmpty: "Comentario" }}</td>
+              <td>{{ turno.qualify[0].atention | isEmpty: "Atención" }}</td>
+              <td>{{ turno.survey[0].recommend | isEmpty: "Encuesta" }}</td>
+              <td>{{ turno.survey[1].fixed | isEmpty: "Encuesta" }}</td>
+              <td>{{ turno.time_updated | date: 'dd/MM/yyyy HH:mm' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Permite Rechazar un Turno -->
+  <div
+    class="container p-4 text-center row mx-auto card text-center"
+    *ngIf="this.flagComponent == 'Refuse'"
+  >
+    <div class="card-header">
+      <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+      <h3>Rechazo de Turno</h3>
+
+      <form [formGroup]="formGroup" (ngSubmit)="confirmRefuse()">
+        <input
+          type="comment"
+          class="form-control"
+          id="comment"
+          placeholder="Ingrese Comentario.."
+          formControlName="comment"
+        />
+        <div *ngFor="let error of errorMessages.comment">
+          <ng-container
+            *ngIf="
+              comment.hasError(error.type) && (comment.dirty || comment.touched)
+            "
+          >
+            <small class="error-message">{{ error.message }}</small>
+          </ng-container>
+        </div>
+      </form>
+    </div>
+    <div class="form-group">
+      <button
+        id="btn-acept"
+        class="btn btn-danger btn-lg btn-block"
+        type="submit"
+        class="btn btn-danger btn-block"
+        style="cursor: pointer"
+        (click)="confirmRefuse()"
+        [disabled]="formGroup.invalid"
+      >
+        Rechazar
+      </button>
+    </div>
+  </div>
+
+  <!-- Permite Cancelar un Turno -->
+  <div
+    class="container p-4 text-center row mx-auto card text-center"
+    *ngIf="this.flagComponent == 'Cancel'"
+  >
+    <div class="card-header">
+      <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+      <h3>Baja de Turno</h3>
+
+      <form [formGroup]="formGroup" (ngSubmit)="onCancel()">
+        <input
+          type="comment"
+          class="form-control"
+          id="comment"
+          placeholder="Ingrese Comentario.."
+          formControlName="comment"
+        />
+        <div *ngFor="let error of errorMessages.comment">
+          <ng-container
+            *ngIf="
+              comment.hasError(error.type) && (comment.dirty || comment.touched)
+            "
+          >
+            <small class="error-message">{{ error.message }}</small>
+          </ng-container>
+        </div>
+      </form>
+    </div>
+    <div class="form-group">
+      <button
+        id="btn-acept"
+        class="btn btn-danger btn-lg btn-block"
+        type="submit"
+        class="btn btn-danger btn-block"
+        style="cursor: pointer"
+        (click)="confirmCancel()"
+        [disabled]="formGroup.invalid"
+      >
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <!-- Permite Finalizar un Turno -->
+  <div
+    class="container p-4 text-center row mx-auto card text-center"
+    *ngIf="this.flagComponent == 'Finish'"
+  >
+    <div class="card-header">
+      <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+      <h3>Finalizar Turno</h3>
+
+      <form [formGroup]="formGroup" (ngSubmit)="confirmFinish()">
+        <input
+          type="comment"
+          class="form-control"
+          id="comment"
+          placeholder="Ingrese Comentario.."
+          formControlName="comment"
+        />
+        <div *ngFor="let error of errorMessages.comment">
+          <ng-container
+            *ngIf="
+              comment.hasError(error.type) && (comment.dirty || comment.touched)
+            "
+          >
+            <small class="error-message">{{ error.message }}</small>
+          </ng-container>
+        </div>
+      </form>
+    </div>
+    <div class="form-group">
+      <button
+        id="btn-acept"
+        class="btn btn-danger btn-lg btn-block"
+        type="submit"
+        class="btn btn-danger btn-block"
+        style="cursor: pointer"
+        (click)="confirmFinish()"
+        [disabled]="formGroup.invalid"
+      >
+        Finalizar
+      </button>
+    </div>
+  </div>
+
+  <!-- Encuesta respecto al turno -->
+  <div
+    class="container p-4 text-center row mx-auto card text-center"
+    *ngIf="this.flagComponent == 'Survey'"
+  >
+    <div class="card-header">
+      <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+      <h3>Encuesta de Calidad</h3>
+
+      <form [formGroup]="formGroup" (ngSubmit)="confirmSurvey()">
+        <input
+          type="text"
+          class="form-control"
+          id="recommend"
+          placeholder="Recomendación al especialista"
+          formControlName="recommend"
+        />
+        <div *ngFor="let error of errorMessages.recommend">
+          <ng-container
+            *ngIf="
+              recommend.hasError(error.type) &&
+              (recommend.dirty || recommend.touched)
+            "
+          >
+            <small class="error-message">{{ error.message }}</small>
+          </ng-container>
+        </div>
+
+        <input
+          type="text"
+          class="form-control"
+          id="fixed"
+          placeholder="Solucionó su problema?"
+          formControlName="fixed"
+        />
+        <div *ngFor="let error of errorMessages.fixed">
+          <ng-container
+            *ngIf="fixed.hasError(error.type) && (fixed.dirty || fixed.touched)"
+          >
+            <small class="error-message">{{ error.message }}</small>
+          </ng-container>
+        </div>
+
+        <input
+          type="text"
+          class="form-control"
+          id="comment"
+          placeholder="Opcional, puede ingresar comentario"
+          formControlName="comment"
+        />
+      </form>
+
+      <div class="form-group">
+        <button
+          id="btn-acept"
+          type="submit"
+          class="btn btn-success btn-block"
+          style="cursor: pointer"
+          (click)="confirmSurvey()"
+          [disabled]="formGroup.invalid"
+        >
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calificar respecto al turno -->
+  <div
+    class="container p-4 text-center row mx-auto card text-center"
+    *ngIf="this.flagComponent == 'Qualify'"
+  >
+    <div class="card-header">
+      <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+      <h3>Calificación de Calidad</h3>
+
+      <form [formGroup]="formGroup" (ngSubmit)="confirmQualify()">
+        <input
+          type="number"
+          class="form-control"
+          id="atention"
+          placeholder="Atención que recibió por parte del Especialista"
+          formControlName="atention"
+        />
+        <div *ngFor="let error of errorMessages.atention">
+          <ng-container
+            *ngIf="
+              atention.hasError(error.type) &&
+              (atention.dirty || atention.touched)
+            "
+          >
+            <small class="error-message">{{ error.message }}</small>
+          </ng-container>
+        </div>
+      </form>
+
+      <div class="form-group">
+        <button
+          id="btn-acept"
+          type="submit"
+          class="btn btn-success btn-block"
+          style="cursor: pointer"
+          (click)="confirmQualify()"
+          [disabled]="formGroup.invalid"
+        >
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agrega historia Clinica -->
+  <div
+    class="container p-4 text-center row mx-auto card text-center"
+    *ngIf="this.flagComponent == 'History'"
+  >
+    <div class="card-header">
+      <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+      <h3>Agregar Historia Clínica</h3>
+
+      <form [formGroup]="formGroup" (ngSubmit)="confirmHistory()">
+        <input
+          type="number"
+          class="form-control"
+          id="height"
+          placeholder="Altura del Paciente"
+          formControlName="height"
+        />
+        <div *ngFor="let error of errorMessages.height">
+          <ng-container
+            *ngIf="
+              height.hasError(error.type) && (height.dirty || height.touched)
+            "
+          >
+            <small class="error-message">{{ error.message }}</small>
+          </ng-container>
+        </div>
+
+        <input
+          type="number"
+          class="form-control"
+          id="weight"
+          placeholder="Peso del Paciente"
+          formControlName="weight"
+        />
+        <div *ngFor="let error of errorMessages.weight">
+          <ng-container
+            *ngIf="
+              weight.hasError(error.type) && (weight.dirty || weight.touched)
+            "
+          >
+            <small class="error-message">{{ error.message }}</small>
+          </ng-container>
+        </div>
+
+        <input
+          type="number"
+          class="form-control"
+          id="temperature"
+          placeholder="Temperatura del Paciente"
+          formControlName="temperature"
+        />
+        <div *ngFor="let error of errorMessages.temperature">
+          <ng-container
+            *ngIf="
+              temperature.hasError(error.type) &&
+              (temperature.dirty || temperature.touched)
+            "
+          >
+            <small class="error-message">{{ error.message }}</small>
+          </ng-container>
+        </div>
+
+        <input
+          type="text"
+          class="form-control"
+          id="pressure"
+          placeholder="Presión del Paciente"
+          formControlName="pressure"
+        />
+        <div *ngFor="let error of errorMessages.pressure">
+          <ng-container
+            *ngIf="
+              pressure.hasError(error.type) &&
+              (pressure.dirty || pressure.touched)
+            "
+          >
+            <small class="error-message">{{ error.message }}</small>
+          </ng-container>
+        </div>
+
+        <div class="input-group form-dinamic" [hidden]="true">
+          <input
+            type="text"
+            class="form-control clave"
+            placeholder="Tipo de dato"
+          />
+
+          <input
+            type="text"
+            class="form-control valor"
+            placeholder="Valor del dato"
+          />
+        </div>
+
+        <div class="input-group form-dinamic" [hidden]="true">
+          <input
+            type="text"
+            class="form-control clave"
+            placeholder="Tipo de dato"
+          />
+
+          <input
+            type="text"
+            class="form-control valor"
+            placeholder="Valor del dato"
+          />
+        </div>
+
+        <div class="input-group form-dinamic" [hidden]="true">
+          <input
+            type="text"
+            class="form-control clave"
+            placeholder="Tipo de dato"
+          />
+
+          <input
+            type="text"
+            class="form-control valor"
+            placeholder="Valor del dato"
+          />
+        </div>
+
+        <small [hidden]="true" class="error-message"
+          >Optativamente puede llenar los 3 nuevos campos</small
+        >
+      </form>
+
+      <div class="form-group">
+        <button
+          id="btn-acept"
+          type="submit"
+          class="btn btn-success btn-block"
+          style="cursor: pointer"
+          (click)="confirmHistory()"
+          [disabled]="formGroup.invalid"
+        >
+          Confirmar
+        </button>
+
+        <button
+          id="btn-acept"
+          class="btn btn-warning btn-block"
+          style="cursor: pointer"
+          (click)="addDataOnHistory()"
+          [disabled]="formGroup.invalid"
+        >
+          Agregar Datos
+        </button>
+
+        <button
+          id="btn-acept"
+          class="btn btn-danger btn-block"
+          style="cursor: pointer"
+          (click)="cleanHistory()"
+        >
+          Limpiar Datos
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

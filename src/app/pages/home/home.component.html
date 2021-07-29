@@ -1,13 +1,163 @@
-<p>home works!</p>
-
-<div class="container">
-    <section id="copyright">
-      <div class="wrapper">
-        <br />
-        Made by Baez Nuñez, Agustin for UTN LAB IV
-        <br />Angular, bootstrap,
-        <br />
+<div class="row" *ngIf="this.user$ | async as userData">
+  <div class="col-xs-12 col-sm-2 col-md-3">
+    <div class="card">
+      <div class="image">
+        <img src="/assets/img/mis-turnos.png" class="card-img-top" />
       </div>
-      <br />
-    </section>
+      <div class="card-inner">
+        <div class="header">
+          <h2>{{ "Mis turnos" | translate }}</h2>
+        </div>
+        <div class="body">
+          <button
+            class="btn btn-primary btn-lg btn-block"
+            [routerLink]="['/turno/list']"
+          >
+            {{ "Ver" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <div
+    class="col-xs-12 col-sm-2 col-md-3"
+    *ngIf="userData[0].user != 'ESPECIALISTA'"
+  >
+    <div class="card">
+      <div class="image">
+        <img src="/assets/img/add-turno.png" class="card-img-top" />
+      </div>
+      <div class="card-inner">
+        <div class="header">
+          <h2>{{ "Añadir" | translate }} {{ "Turno" | translate }}</h2>
+        </div>
+        <div class="body">
+          <button
+            class="btn btn-primary btn-lg btn-block"
+            [routerLink]="['/turno/add']"
+          >
+            {{ "Agregar" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-2 col-md-3"
+    *ngIf="userData[0].user != 'PACIENTE'"
+  >
+    <div class="card">
+      <div class="image">
+        <img src="/assets/img/pacientes.png" class="card-img-top" />
+      </div>
+      <div class="card-inner">
+        <div class="header">
+          <h2>{{ "Pacientes" | translate }}</h2>
+        </div>
+        <div class="body">
+          <button
+            class="btn btn-primary btn-lg btn-block"
+            [routerLink]="['/history/list']"
+          >
+            {{ "Ver" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-2 col-md-3">
+    <div class="card">
+      <div class="image">
+        <img src="/assets/img/comments.png" class="card-img-top" />
+      </div>
+      <div class="card-inner">
+        <div class="header">
+          <h2>{{ "Comentarios" | translate }}</h2>
+        </div>
+        <div class="body">
+          <button
+            class="btn btn-primary btn-lg btn-block"
+            [routerLink]="['/comments']"
+          >
+            {{ "Ver" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-2 col-md-3"
+    *ngIf="userData[0].user == 'ADMINISTRADOR'"
+  >
+    <div class="card">
+      <div class="image">
+        <img src="/assets/img/reportes.png" class="card-img-top" />
+      </div>
+      <div class="card-inner">
+        <div class="header">
+          <h2>{{ "Reportes" | translate }}</h2>
+        </div>
+        <div class="body">
+          <button
+            class="btn btn-primary btn-lg btn-block"
+            [routerLink]="['/reports']"
+          >
+            {{ "Ver" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-2 col-md-3"
+    *ngIf="userData[0].user == 'ADMINISTRADOR'"
+  >
+    <div class="card">
+      <div class="image">
+        <img src="/assets/img/users.png" class="card-img-top" />
+      </div>
+      <div class="card-inner">
+        <div class="header">
+          <h2>{{ "Usuarios" | translate }}</h2>
+        </div>
+        <div class="body">
+          <button
+            class="btn btn-primary btn-lg btn-block"
+            [routerLink]="['/users']"
+          >
+            {{ "Ver" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="col-xs-12 col-sm-2 col-md-3"
+    *ngIf="userData[0].user == 'ADMINISTRADOR'"
+  >
+    <div class="card">
+      <div class="image">
+        <img src="/assets/img/admin.png" class="card-img-top" />
+      </div>
+      <div class="card-inner">
+        <div class="header">
+          <h2>{{ "Añadir" | translate }} Adm</h2>
+        </div>
+        <div class="body">
+          <button
+            class="btn btn-primary btn-lg btn-block"
+            [routerLink]="['/admin/add']"
+          >
+            {{ "Ver" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

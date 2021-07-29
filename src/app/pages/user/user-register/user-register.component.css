@@ -1,62 +1,41 @@
-#btn-user{
-  margin-left: 1.46rem;
-}
-
-#btn-register{
-  margin-left: 0.8rem;
-}
-
-.container-img-paciente {
-  width: 39rem;
-  height: 43.1rem;
-  margin-left: 1%;
+.container-register {
+  top: auto;
+  width: 26rem;
+  height: auto;
   position: absolute;
-  right: 1rem;
+  right: auto;
+  left: auto;
 }
 
-.container-img-especialista {
-  width: 39rem;
-  height: 43rem;
-  margin: 0%;
-  position: absolute;
-  right: 1rem;
+.container-content {
+  top: auto;
+  position: relative;
+  left: 50%;
+  width: 50%;
+  background-color: whitesmoke;
 }
 
-.container-img-admin {
-  width: 39rem;
-  height: 34.3rem;
-  margin: 0%;
-  position: absolute;
-  right: 1rem;
+.form-control {
+  margin-bottom: 0.5rem;
 }
 
-select {
-  font-size: 14px;
-  height: 30px;
-  padding: 5px;
-  width: 250px;
-}
-
-input,
-select {
-  margin: 0.8rem;
+.container{
+  min-height: 50rem;
+  width: 58rem;
 }
 
 small {
   color: red;
 }
 
-select {
-  cursor: pointer;
+.div-buttons{
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+  margin: 0.5rem;
 }
 
-.card-header {
-  left: 50;
-  position: relative;
-  width: 40%;
-  background-color: whitesmoke;
-}
-
-#input-photo {
-  left: 0.8rem;
+.container-img{
+  width: 27.5rem;
+  height: 20.4rem;
 }

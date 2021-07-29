@@ -1,50 +1,58 @@
 <div class="container p-4 text-center row mx-auto card text-center">
-  <div class="img-kynd-user">
+  <div class="container-content">
+    <div style="max-height: 55rem; overflow: scroll">
+
+      <app-especialidad-list
+        *ngIf="kyndUser == 'Especialista'"
+        (listSelected)="onSelect($event)"
+        
+      >
+        ></app-especialidad-list
+      >
+    </div>
+
     <img
-      class="container-img-admin"
+      class="container-img"
       src="/assets/img/admin-register.png"
       *ngIf="kyndUser == 'Administrador'"
     />
     <img
-      class="container-img-especialista"
-      src="/assets/img/especialista-register.png"
-      *ngIf="kyndUser == 'Especialista'"
+      class="container-img"
+      src="/assets/img/paciente-register.png"
+      *ngIf="kyndUser == 'Paciente'"
     />
     <img
-      class="container-img-paciente"
+      class="container-img"
+      src="/assets/img/admin-register.png"
+      *ngIf="kyndUser == 'Administrador'"
+    />
+    <img
+      class="container-img"
       src="/assets/img/paciente-register.png"
       *ngIf="kyndUser == 'Paciente'"
     />
   </div>
-  <div class="card-header">
-    <h3>Registro de {{ this.kyndUser }}</h3>
 
-    <!-- Cambiar select por Buttons -->
+  <div class="card-header container-register">
+    <h3>
+      {{ "Registro" | translate }} {{ "de" | translate }}
+      {{ this.kyndUser | translate }}
+    </h3>
 
-    <div class="col div-buttons">
+    <div class="div-buttons">
       <button
-        [disabled]="this.isAdmin"
-        id="btn-user"
-        class="btn btn-primary mt-2 mb-2"
+        id="btn-user-paciente"
+        class="btn btn-warning mt-2 mb-2"
         (click)="setUser('Paciente')"
       >
-        Paciente
+        {{ "Paciente" | translate }}
       </button>
       <button
-        [disabled]="this.isAdmin"
-        id="btn-user"
-        class="btn btn-primary mt-2 mb-2"
+        id="btn-user-especialista"
+        class="btn btn-warning mt-2 mb-2"
         (click)="setUser('Especialista')"
       >
-        Especialista
-      </button>
-      <button
-        [disabled]="!this.isAdmin"
-        id="btn-user"
-        class="btn btn-primary mt-2 mb-2"
-        (click)="setUser('Administrador')"
-      >
-        Admin
+        {{ "Especialista" | translate }}
       </button>
     </div>
 
@@ -56,7 +64,9 @@
             type="text"
             class="form-control"
             id="name"
-            placeholder="Ingrese Nombre.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Nombre' | translate
+            }}.."
             formControlName="name"
           />
           <small
@@ -66,14 +76,16 @@
               formAdmin.controls.name.touched
             "
           >
-            Ingrese Nombre
+            {{ "Ingrese" | translate }} {{ "Nombre" | translate }}
           </small>
 
           <input
             type="text"
             class="form-control"
             id="surname"
-            placeholder="Ingrese Apellido.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Apellido' | translate
+            }}.."
             formControlName="surname"
           />
           <div *ngFor="let error of errorMessages.surname">
@@ -91,7 +103,7 @@
             type="number"
             class="form-control"
             id="age"
-            placeholder="Ingrese Edad.."
+            placeholder="{{ 'Ingrese' | translate }} {{ 'Edad' | translate }}.."
             formControlName="age"
           />
           <div *ngFor="let error of errorMessages.age">
@@ -106,7 +118,7 @@
             type="number"
             class="form-control"
             id="dni"
-            placeholder="Ingrese DNI.."
+            placeholder="{{ 'Ingrese' | translate }} DNI.."
             formControlName="dni"
           />
           <div *ngFor="let error of errorMessages.dni">
@@ -119,9 +131,9 @@
 
           <div class="input-group mb-3" id="input-photo">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroupFileAddon01"
-                >Foto</span
-              >
+              <span class="input-group-text" id="inputGroupFileAddon01">{{
+                "Foto" | translate
+              }}</span>
             </div>
             <div class="custom-file">
               <input
@@ -130,8 +142,8 @@
                 class="custom-file-input"
                 aria-describedby="inputGroupFileAddon01"
               />
-              <label class="custom-file-label" for="inputGroupFile01"
-                >Foto Perfil</label
+              <label class="custom-file-label" for="inputGroupFile01">
+                {{ "Foto" | translate }} {{ "Perfil" | translate }}</label
               >
             </div>
           </div>
@@ -140,7 +152,9 @@
             type="email"
             class="form-control"
             id="email"
-            placeholder="Ingrese Correo.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Correo' | translate
+            }}.."
             formControlName="email"
           />
           <div *ngFor="let error of errorMessages.email">
@@ -157,7 +171,9 @@
             type="password"
             class="form-control"
             id="password"
-            placeholder="Ingrese Contraseña.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Contraseña' | translate
+            }}.."
             formControlName="password"
           />
           <div *ngFor="let error of errorMessages.password">
@@ -180,7 +196,9 @@
             type="text"
             class="form-control"
             id="name"
-            placeholder="Ingrese Nombre.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Nombre' | translate
+            }}.."
             formControlName="name"
           />
           <div *ngFor="let error of errorMessages.name">
@@ -195,7 +213,9 @@
             type="text"
             class="form-control"
             id="surname"
-            placeholder="Ingrese Apellido.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Surname' | translate
+            }}.."
             formControlName="surname"
           />
           <div *ngFor="let error of errorMessages.surname">
@@ -213,7 +233,7 @@
             type="number"
             class="form-control"
             id="age"
-            placeholder="Ingrese Edad.."
+            placeholder="{{ 'Ingrese' | translate }} {{ 'Edad' | translate }}.."
             formControlName="age"
           />
           <div *ngFor="let error of errorMessages.age">
@@ -228,7 +248,7 @@
             type="number"
             class="form-control"
             id="dni"
-            placeholder="Ingrese DNI.."
+            placeholder="{{ 'Ingrese' | translate }} DNI.."
             formControlName="dni"
           />
           <div *ngFor="let error of errorMessages.dni">
@@ -241,9 +261,9 @@
 
           <div class="input-group mb-3" id="input-photo">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroupFileAddon01"
-                >Foto</span
-              >
+              <span class="input-group-text" id="inputGroupFileAddon01">{{
+                "Foto" | translate
+              }}</span>
             </div>
             <div class="custom-file">
               <input
@@ -252,48 +272,35 @@
                 class="custom-file-input"
                 aria-describedby="inputGroupFileAddon01"
               />
-              <label class="custom-file-label" for="inputGroupFile01"
-                >Foto Perfil</label
+              <label class="custom-file-label" for="inputGroupFile01">
+                {{ "Foto" | translate }} {{ "Perfil" | translate }}</label
               >
             </div>
           </div>
 
-          <label>Seleccione Especialidad</label>
-          <select
-            class="form-select"
-            id="especialidad"
-            formControlName="especialidad"
+          <small *ngIf="!this.especialidadSelected" class="error-message"
+            >Recuerde seleccionar una o más especialidades</small
           >
-            <option value="Dermatología">Dermatología</option>
-            <option value="Ginecología y obstetricia o tocología">
-              Ginecología y obstetricia o tocología
-            </option>
-            <option value="Medicina de Urgencias">Medicina de Urgencias</option>
-            <option value="Oftalmología">Oftalmología</option>
-            <option value="Otorrinolaringología">Otorrinolaringología</option>
-            <option value="Traumatología">Traumatología</option>
-            <option value="Otro">Otro</option>
-          </select>
 
-          <div *ngFor="let error of errorMessages.especialidad">
+          <input
+            type="text"
+            class="form-control"
+            id="schedule"
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Disponibilidad' | translate
+            }}.."
+            formControlName="schedule"
+          />
+          <div *ngFor="let error of errorMessages.schedule">
             <ng-container
               *ngIf="
-                especialidad.hasError(error.type) &&
-                (especialidad.dirty || especialidad.touched)"
+                schedule.hasError(error.type) &&
+                (schedule.dirty || schedule.touched)
+              "
             >
               <small class="error-message">{{ error.message }}</small>
             </ng-container>
           </div>
-
-          <input
-            *ngIf="especialidad.value === 'Otro' || this.flagEspecialidad"
-            type="especialidad"
-            class="form-control"
-            id="especialidad"
-            placeholder="Ingrese Especialidad.."
-            formControlName="especialidad"
-            (click)=booleanEspecialidad()
-          />
 
           <input
             type="email"
@@ -315,7 +322,9 @@
             type="password"
             class="form-control"
             id="password"
-            placeholder="Ingrese Contraseña.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Contraseña' | translate
+            }}.."
             formControlName="password"
           />
           <div *ngFor="let error of errorMessages.password">
@@ -338,7 +347,9 @@
             type="text"
             class="form-control"
             id="name"
-            placeholder="Ingrese Nombre.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Nombre' | translate
+            }}.."
             formControlName="name"
           />
           <div *ngFor="let error of errorMessages.name">
@@ -353,7 +364,9 @@
             type="text"
             class="form-control"
             id="surname"
-            placeholder="Ingrese Apellido.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Apellido' | translate
+            }}.."
             formControlName="surname"
           />
           <div *ngFor="let error of errorMessages.surname">
@@ -371,7 +384,7 @@
             type="number"
             class="form-control"
             id="age"
-            placeholder="Ingrese Edad.."
+            placeholder="{{ 'Ingrese' | translate }} {{ 'Edad' | translate }}.."
             formControlName="age"
           />
           <div *ngFor="let error of errorMessages.age">
@@ -386,7 +399,7 @@
             type="number"
             class="form-control"
             id="dni"
-            placeholder="Ingrese DNI.."
+            placeholder="{{ 'Ingrese' | translate }} DNI.."
             formControlName="dni"
           />
           <div *ngFor="let error of errorMessages.dni">
@@ -399,9 +412,9 @@
 
           <div class="input-group mb-3" id="input-photo">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroupFileAddon01"
-                >Foto</span
-              >
+              <span class="input-group-text" id="inputGroupFileAddon01">{{
+                "Foto" | translate
+              }}</span>
             </div>
             <div class="custom-file">
               <input
@@ -410,17 +423,17 @@
                 class="custom-file-input"
                 aria-describedby="inputGroupFileAddon01"
               />
-              <label class="custom-file-label" for="inputGroupFile01"
-                >Foto Principal</label
+              <label class="custom-file-label" for="inputGroupFile01">
+                {{ "Foto" | translate }} {{ "Principal" | translate }}</label
               >
             </div>
           </div>
 
           <div class="input-group mb-3" id="input-photo">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroupFileAddon01"
-                >Foto</span
-              >
+              <span class="input-group-text" id="inputGroupFileAddon01">{{
+                "Foto" | translate
+              }}</span>
             </div>
             <div class="custom-file">
               <input
@@ -430,7 +443,7 @@
                 aria-describedby="inputGroupFileAddon01"
               />
               <label class="custom-file-label" for="inputGroupFile01"
-                >Foto Secundaria</label
+                >{{ "Foto" | translate }} {{ "Secundaria" | translate }}</label
               >
             </div>
           </div>
@@ -439,7 +452,9 @@
             type="text"
             class="form-control"
             id="obra_social"
-            placeholder="Ingrese Obra Social.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Obra social' | translate
+            }}.."
             formControlName="obra_social"
           />
           <div *ngFor="let error of errorMessages.obra_social">
@@ -457,7 +472,9 @@
             type="email"
             class="form-control"
             id="email"
-            placeholder="Ingrese Correo.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Correo' | translate
+            }}.."
             formControlName="email"
           />
           <div *ngFor="let error of errorMessages.email">
@@ -474,7 +491,9 @@
             type="password"
             class="form-control"
             id="password"
-            placeholder="Ingrese Contraseña.."
+            placeholder="{{ 'Ingrese' | translate }} {{
+              'Contraseña' | translate
+            }}.."
             formControlName="password"
           />
           <div *ngFor="let error of errorMessages.password">
@@ -491,29 +510,36 @@
       </div>
 
       <div class="form-group">
+        <app-captcha (status)="onCaptcha($event)"></app-captcha>
+      </div>
+
+      <div class="form-group">
         <button
           id="btn-register"
-          class="btn btn-primary btn-lg btn-block"
           type="submit"
           class="btn btn-primary btn-block"
           style="cursor: pointer"
           (click)="onRegister()"
           [disabled]="
+            this.captcha == false ||
             (formAdmin.invalid && this.kyndUser == 'Administrador') ||
             (formPaciente.invalid && this.kyndUser == 'Paciente') ||
+            (this.kyndUser == 'Especialista' && !this.especialidadSelected) ||
             (formEspecialista.invalid && this.kyndUser == 'Especialista') ||
-            this.photo == null ||
-            (this.photo2 == null && this.kyndUser == 'Paciente')
+            (this.photo2 == null && this.kyndUser == 'Paciente') ||
+            this.photo == null
           "
         >
-          Register
+          {{ "Registrarse" | translate }}
         </button>
       </div>
 
       <div *ngIf="!isAdmin" class="form-group mt-3">
         <p>
-          Do you have an account?
-          <a routerLink="/user/login" routerLinkActive="active">Login</a>
+          {{ "¿Ya tienes una cuenta?" | translate }}
+          <a routerLink="/user/login" routerLinkActive="active">{{
+            "Ingresar" | translate
+          }}</a>
         </p>
       </div>
     </div>

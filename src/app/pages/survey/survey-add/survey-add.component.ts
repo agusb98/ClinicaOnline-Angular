@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Turno } from 'src/app/models/turno';
-import { CommentService } from 'src/app/services/comment.service';
+import { TurnoService } from 'src/app/services/turno.service';
 
 @Component({
   selector: 'app-survey-add',
@@ -18,7 +18,7 @@ export class SurveyAddComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private commentService: CommentService,
+    private turnoService: TurnoService,
     private router: Router,
   ) { }
 
@@ -61,8 +61,8 @@ export class SurveyAddComponent implements OnInit {
 
   async onAdd() {
     const survey = this.getValues();
-    this.commentService.update(survey);
-    this.onBack();
+    // this.turnoService.update(survey);
+    // this.onBack();
   }
 
   getValues() {
@@ -83,7 +83,7 @@ export class SurveyAddComponent implements OnInit {
   }
 
   getAll() {
-    this.commentService.getAll().valueChanges().subscribe((data) => {
+    this.turnoService.getAll().valueChanges().subscribe((data) => {
       data.forEach(element => {
         if (element.id === this.turno[0].id && element.survey) {
           this.flagSurvey = false;

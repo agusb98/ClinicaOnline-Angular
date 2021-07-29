@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Turno } from 'src/app/models/turno';
-import { CommentService } from 'src/app/services/comment.service';
+import { TurnoService } from 'src/app/services/turno.service';
 
 @Component({
   selector: 'app-qualify-add',
@@ -19,7 +19,7 @@ export class QualifyAddComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private commentService: CommentService,
+    private turnoService: TurnoService,
     private router: Router
   ) { }
 
@@ -52,8 +52,8 @@ export class QualifyAddComponent implements OnInit {
 
   async onAdd() {
     const qualify = this.getValues();
-    this.commentService.update(qualify);
-    this.onBack();
+    // this.turnoService.update(qualify);
+    // this.onBack();
   }
 
   getValues() {
@@ -72,7 +72,7 @@ export class QualifyAddComponent implements OnInit {
   }
 
   getAll() {
-    this.commentService.getAll().valueChanges().subscribe((data) => {
+    this.turnoService.getAll().valueChanges().subscribe((data) => {
       data.forEach(element => {
         if (element.id === this.turno[0].id && element.qualify) {
           this.flagQualify = false;

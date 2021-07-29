@@ -7,7 +7,12 @@ import * as firebase from 'firebase';
 
 //Notifications
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
+import { first, map } from 'rxjs/operators';
+import { Admin } from '../models/admin';
 import { Especialista } from '../models/especialista';
+import { Paciente } from '../models/paciente';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +29,16 @@ export class UserService {
     this.referenceToCollection = this.db.collection(this.pathOfCollection, ref => ref.orderBy('name', 'asc'));
   }
 
+  async set(data: User) {
+    try { return this.referenceToCollection.doc(data.id).set({ ...data }); }
+    catch (error) { console.log(error); }
+  }
+
   async add(data: any, photo: any, photo2?: any) {
     try {
       data.id = this.db.createId();
 
-      const filePath = `/users/principal/${data.id}`;
+      const filePath = `/users/${data.id}-principal`;
       this.dbStorage.ref(filePath);
       this.dbStorage.upload(filePath, photo).then(() => {
         let storages = firebase.default.storage();
@@ -38,36 +48,80 @@ export class UserService {
         spaceRef.getDownloadURL().then(url => {
           data.photo = url;
           data.photo = `${data.photo}`;
+
+          if (photo2 != null) {
+            const filePath = `/users/${data.id}`;
+            this.dbStorage.ref(filePath);
+            this.dbStorage.upload(filePath, photo2).then(() => {
+              let storages = firebase.default.storage();
+              let storageRef = storages.ref();
+              let spaceRef = storageRef.child(filePath);
+
+              spaceRef.getDownloadURL().then(url => {
+                data.photo2 = url;
+                data.photo2 = `${data.photo2}`;
+                return this.referenceToCollection.doc(data.id).set({ ...data });  //  llaves es objeto, 3 puntitos es dinamico
+              });
+            });
+          }
+          else {
+            return this.referenceToCollection.doc(data.id).set({ ...data });  //  llaves es objeto, 3 puntitos es dinamico
+          }
         });
       });
-
-      if (photo2 != null) {
-        const filePath = `/users/principal/${data.id}2`;
-        this.dbStorage.ref(filePath);
-        this.dbStorage.upload(filePath, photo2).then(() => {
-          let storages = firebase.default.storage();
-          let storageRef = storages.ref();
-          let spaceRef = storageRef.child(filePath);
-
-          spaceRef.getDownloadURL().then(url => {
-            data.photo2 = url;
-            data.photo2 = `${data.photo2}`;
-          });
-        });
-      }
-      setTimeout(() => {
-        return this.referenceToCollection.doc(data.id).set({ ...data });  //  llaves es objeto, 3 puntitos es dinamico
-      }, 8000);
     }
     catch (error) { this.toastr.error(error, 'Register'); }
     return;
   }
 
-  getAll() {
+  getAll(): Observable<User[]> {
     try {
-      return this.referenceToCollection;
+      return this.referenceToCollection.snapshotChanges().pipe(
+        map(actions => actions.map(a => a.payload.doc.data() as User))
+      );
     }
-    catch (error) { this.toastr.error('Error at the moment to get users..', 'Data users'); }
+    catch (error) { this.toastr.error('Error al momento de obtener Usuarios..', 'Dato de Usuarios'); }
+  }
+
+  getByProfile(profile: 'ADMINISTRADOR' | 'PACIENTE' | 'ESPECIALISTA'): Observable<User[]> {
+    try {
+      return this.getAll().pipe(
+        map(users => users.filter(
+          user => user.user.includes(profile)))
+      );
+    }
+    catch (error) { this.toastr.error('Error al momento de obtener Usuarios..', 'Dato de Usuarios'); }
+  }
+
+  getOne(email: string): Observable<User[]> {
+    try {
+      return this.getAll().pipe(
+        map(users => users.filter(
+          user => user.email.includes(email)))
+      );
+    }
+    catch (error) { this.toastr.error('Error al momento de obtener Usuario..', 'Dato de Usuarios'); }
+  }
+
+  getEspecialistasWithPermission(): Observable<User[]> {
+    try {
+      return this.getAll().pipe(
+        map(users => 
+          users.filter(
+          user => user.user.includes('ESPECIALISTA')))
+      );
+    }
+    catch (error) { this.toastr.error('Error al momento de obtener Usuario..', 'Dato de Usuarios'); }
+  }
+
+  getEspecialistasWithoutPermission(): Observable<User[]> {
+    try {
+      return this.getAll().pipe(
+        map(users => users.filter(
+          user => user['status'].includes(false)))
+      );
+    }
+    catch (error) { this.toastr.error('Error al momento de obtener Usuario..', 'Dato de Usuarios'); }
   }
 
   async uploadPhoto(photo, id: string) {

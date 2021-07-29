@@ -15,9 +15,9 @@ export class UserLogoutComponent {
   ) { }
 
   async onLogout() {
-    try { 
-      await this.authService.logout(); 
-      this.router.navigate(['user/login']);
+    try {
+      await this.authService.logout();
+      this.router.navigate(['/']);
     }
     catch (error) { }
   }

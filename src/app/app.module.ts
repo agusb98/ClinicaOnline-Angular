@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 //Toastr notification
 import { ToastrModule } from 'ngx-toastr';
 
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 //Firebase
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -16,30 +18,45 @@ import { environment } from 'src/environments/environment';
 import { NavbarComponent } from './pages/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import { AdminModule } from './components/admin/admin.module';
-import { TurnoModule } from './components/turno/turno.module';
-import { CommentSingleComponent } from './pages/comment/comment-single/comment-single.component';
+import { HomeModule } from './components/home/home.module';
 
+// Translate
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TurnoModule } from './components/turno/turno.module';
+
+export function createTranslateLoader(http: HttpClient){
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
+    NavbarComponent
   ],
   imports: [
-    TurnoModule,  //DEBE IRSE
-    AdminModule,  //DEBE IRSE
+    TurnoModule,
+    HomeModule,
+    AdminModule,
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     ToastrModule.forRoot({
       positionClass: 'toast-top-center',  //Set position
       preventDuplicates: true,
+    }),
+    TranslateModule.forRoot({
+      loader:{
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
     })
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

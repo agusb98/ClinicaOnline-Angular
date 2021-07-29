@@ -1,0 +1,44 @@
+.img-photo-secondary {
+  width: 7rem;
+  position: absolute;
+  top: 40%;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.container-filter {
+  display: flex;
+  flex-direction: row-reverse;
+  text-align: center;
+}
+
+.filter {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+#btn-filter, #btn-refresh {
+  width: 10%;
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+
+#btn-back {
+  background-color: transparent;
+  border: none;
+  margin-left: 64rem;
+  height: 2.6rem;
+  width: 2.5rem;
+}
+
+#btn-download {
+  margin-left: 59.5rem;
+  width: 7rem;
+}
+
+#title{
+  font-family: sans-serif;
+}

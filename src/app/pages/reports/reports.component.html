@@ -1,0 +1,256 @@
+<div class="row" *ngIf="this.action == ''" >
+  <div class="col-xs-12 col-sm-2 col-md-3">
+    <div class="card">
+      <div class="image">
+        <img src="/assets/img/logs.png" class="card-img-top" />
+      </div>
+      <div class="card-inner">
+        <div class="header">
+          <h2>Ingresos al sistema</h2>
+        </div>
+        <div class="body">
+          <button class="btn btn-primary btn-lg btn-block" (click)="getLogs()">
+            Ver
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-2 col-md-3">
+    <div class="card">
+      <div class="image">
+        <img src="/assets/img/weeks.png" class="card-img-top" />
+      </div>
+      <div class="card-inner">
+        <div class="header">
+          <h2>Turnos por sector</h2>
+        </div>
+        <div class="body">
+          <button
+            class="btn btn-primary btn-lg btn-block"
+            (click)="getTurnos()"
+          >
+            Ver
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-2 col-md-3">
+    <div class="card">
+      <div class="image">
+        <img src="/assets/img/days.png" class="card-img-top" />
+      </div>
+      <div class="card-inner">
+        <div class="header">
+          <h2>Días trabajados por especialist</h2>
+        </div>
+        <div class="body">
+          <button
+            class="btn btn-primary btn-lg btn-block"
+            (click)="getQuantity()"
+          >
+            Ver
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VISUALIZADOR DE LOGS -->
+<div class="container card-body card" *ngIf="this.action == 'datelogs'">
+  <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+  <h1>Historial ingresos de especialistas</h1>
+  <form [formGroup]="form" (ngSubmit)="filterLogsByDate()">
+    <input
+      type="text"
+      class="form-control"
+      id="dateStart"
+      placeholder="Fecha Inicial.."
+      formControlName="dateStart"
+    />
+    <input
+      type="text"
+      class="form-control"
+      id="dateEnd"
+      placeholder="Fecha Final.."
+      formControlName="dateEnd"
+    />
+  </form>
+
+  <div class="form-group">
+    <button
+      id="btn-register"
+      type="submit"
+      class="btn btn-success"
+      style="cursor: pointer"
+      (click)="filterLogsByDate()"
+      [disabled]="form.invalid"
+    >
+      Buscar
+    </button>
+    <button
+      id="btn-register"
+      type="submit"
+      class="btn btn-warning"
+      style="cursor: pointer"
+      (click)="onClean()"
+      [disabled]="form.invalid"
+    >
+      Limpiar
+    </button>
+  </div>
+</div>
+
+<!-- VISUALIZA INGRESOS ANTES DE DESCARGAR -->
+<div
+  class="container card-body card"
+  *ngIf="this.dateStart && this.action == 'logs' && this.obs$ | async"
+>
+  <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+  <div class="row" id="htmlData">
+    <div>
+      <h6 style="text-align: right">
+        Informes de Ingresos al sistema del
+        <span>{{ this.dateStart.value | date: "dd/MM/yyyy HH:mm" }}</span> hasta
+        el
+        <span>{{ this.dateEnd.value | date: "dd/MM/yyyy HH:mm" }}</span>
+      </h6>
+
+      <table class="table table-bordered mt-4" *ngFor="let log of this.list">
+        <thead>
+          <tr class="table-primary">
+            <th>Apellido</th>
+            <th>Nombre</th>
+            <th>Ingreso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ log.surname }}</td>
+            <td>{{ log.name }}</td>
+            <td>{{ log.date | date: "dd/MM/yyyy HH:mm" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <button id="btn-download" class="btn btn-success" (click)="getPDF()">
+    Descargar
+  </button>
+</div>
+
+<!-- VISUALIZA CANT OPERACIONES ANTES DE DESCARGAR -->
+<div
+  class="container card-body card"
+  *ngIf="this.dateStart && this.action == 'quantityByEsp' && this.obs$ | async"
+>
+  <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+  <div class="row" id="htmlData">
+    <div>
+      <h6 style="text-align: right">
+        Informe cantidad de operaciones por especialidad
+      </h6>
+
+      <table class="table table-bordered mt-4" *ngFor="let esp of this.list">
+        <thead>
+          <tr class="table-primary">
+            <th>Especialidad</th>
+            <th>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ esp.name }}</td>
+            <td>{{ esp.count }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <button id="btn-download" class="btn btn-success" (click)="getPDF()">
+    Descargar
+  </button>
+</div>
+
+<!-- FILTRADOR POR FECHA PARA CANTIDAD DE DIAS TRABAJADO -->
+<div class="container card-body card" *ngIf="this.action == 'daysworked'">
+  <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+  <h1>Historial cantidad días trabajados por especialista</h1>
+  <form [formGroup]="form" (ngSubmit)="filterWorksByDate()">
+    <input
+      type="text"
+      class="form-control"
+      id="dateStart"
+      placeholder="Fecha Inicial.."
+      formControlName="dateStart"
+    />
+    <input
+      type="text"
+      class="form-control"
+      id="dateEnd"
+      placeholder="Fecha Final.."
+      formControlName="dateEnd"
+    />
+  </form>
+
+  <div class="form-group">
+    <button
+      id="btn-register"
+      type="submit"
+      class="btn btn-success"
+      style="cursor: pointer"
+      (click)="filterWorksByDate()"
+      [disabled]="form.invalid"
+    >
+      Buscar
+    </button>
+    <button
+      id="btn-register"
+      type="submit"
+      class="btn btn-warning"
+      style="cursor: pointer"
+      (click)="onClean()"
+      [disabled]="form.invalid"
+    >
+      Limpiar
+    </button>
+  </div>
+</div>
+
+<!-- VISUALIZA CANT DIAS TRABAJADOS POR CADA ESP ANTES DE DESCARGAR -->
+<div
+  class="container card-body card"
+  *ngIf="this.dateStart && this.action == 'daysworkedPDF' && this.obs$ | async"
+>
+  <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
+  <div class="row" id="htmlData">
+    <div>
+      Informe cantidad días trabajados de cada especialista del:
+      <span>{{ this.dateStart.value | date: "dd/MM/yyyy HH:mm" }}</span> hasta
+      el
+      <span>{{ this.dateEnd.value | date: "dd/MM/yyyy HH:mm" }}</span>
+
+      <table class="table table-bordered mt-4" *ngFor="let turno of this.list">
+        <thead>
+          <tr class="table-primary">
+            <th>Especialidad</th>
+            <th>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ turno.especialista.surname }}, {{ turno.especialista.name }}</td>
+            <td> {{turno.count}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <button id="btn-download" class="btn btn-success" (click)="getPDF()">
+    Descargar
+  </button>
+</div>
