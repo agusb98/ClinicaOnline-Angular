@@ -4,13 +4,13 @@ import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 
-import{ slideInAnimation } from './app-routing.animation';
+import { slideInAnimation } from './app-routing.animation';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  animations:[slideInAnimation]
+  animations: [slideInAnimation]
 })
 export class AppComponent implements OnInit {
   title = 'ClinicaOnline';
