@@ -106,9 +106,9 @@ export class UserService {
   getEspecialistasWithPermission(): Observable<User[]> {
     try {
       return this.getAll().pipe(
-        map(users => 
+        map(users =>
           users.filter(
-          user => user.user.includes('ESPECIALISTA')))
+            user => user.user.includes('ESPECIALISTA')))
       );
     }
     catch (error) { this.toastr.error('Error al momento de obtener Usuario..', 'Dato de Usuarios'); }
@@ -122,6 +122,30 @@ export class UserService {
       );
     }
     catch (error) { this.toastr.error('Error al momento de obtener Usuario..', 'Dato de Usuarios'); }
+  }
+
+  /* 
+    Gets all Especialistas with Permition and one of theirs Especialidades have same name as param
+  */
+  getEspecialistasByEsp(name: string): Observable<User[]> {
+    try {
+      return this.getEspecialistasWithPermission().pipe(
+        map(users => users.filter(
+          user => {
+            let a: boolean = false;
+
+            user['especialidad'].forEach(e => {
+              if (e['name'] == name) {
+                a = true;
+              }
+            });
+
+            return a;
+          }
+        ))
+      );
+    }
+    catch (error) { this.toastr.error('Error al momento de obtener Especialista..', 'Dato de Especialistas'); }
   }
 
   async uploadPhoto(photo, id: string) {

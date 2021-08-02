@@ -1,194 +1,132 @@
-<div class="container p-4 text-center row mx-auto card text-center">
-  <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
-  <div class="container-select-esp">
-    <div *ngIf="this.listEspecialistas$ | async">
-      <form [formGroup]="formFilter" (ngSubmit)="onFilter()">
-        <input
-          type="text"
-          formControlName="filter"
-          class="form-control filter"
-          placeholder="Buscar.."
-        />
-      </form>
-
-      <button
-        id="btn-filter"
-        class="btn btn-primary btn-lg btn-block"
-        type="submit"
-        class="btn btn-primary btn-block"
-        style="cursor: pointer"
-        (click)="onFilter()"
+<div class="container" *ngIf="user$ | async as user">
+  <h1 style="text-align: center">Añadir Turno</h1>
+  <div class="container-action">
+    <div class="row">
+      <div class="col-xs-12 col-sm-2 col-md-3">
+        <div class="card" (click)="this.getEspecialistas()">
+          <img
+            class="img-action"
+            src="https://www.latercera.com/resizer/ymjqWEY10Uj81Y9qwiFF6195Zxw=/900x600/smart/arc-anglerfish-arc2-prod-copesa.s3.amazonaws.com/public/WAGFWH6YPRBGVPWQ2QFNXWJ7CU.jpg"
+          />
+          <div class="card-inner">
+            <div class="header">
+              <span class="span-action">Especialistas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-2 col-md-3">
+        <div class="card" (click)="this.getEspecialidades()">
+          <img
+            class="img-action"
+            src="https://st2.depositphotos.com/1663905/10093/v/950/depositphotos_100937090-stock-illustration-medical-specialties-icons-set-1.jpg"
+          />
+          <div class="card-inner">
+            <div class="header">
+              <span class="span-action">Especialidad</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: center">
+      <span class="span-info" *ngIf="!scheduleSelected"
+        >Seleccione Alternativa</span
       >
-        Buscar
-      </button>
-      <div style="max-height: 55rem; overflow: scroll">
-        <table id="table-especialistas" class="table table-dark mydatatable">
-          <thead>
-            <tr>
-              <th>Especialista</th>
-              <th>Especialidad</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let esp of this.filterEspecialistas">
-              <td>{{ esp.name }} {{ esp.surname }}</td>
-              <td>{{ esp.especialidad.name }}</td>
-              <td>
-                <button
-                  id="button-add-esp-{{ esp.id }}"
-                  class="btn btn-primary mt-2 mb-2"
-                  (click)="clickEspecialista(esp, esp.especialidad)"
-                >
-                  Seleccionar
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    </div>
+  </div>
 
-        <table
-          id="table-pacientes"
-          style="display: none"
-          class="table table-dark mydatatable"
-          *ngIf="this.filterPacientes"
-        >
-          <thead>
-            <tr>
-              <th>Paciente</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let paciente of this.filterPacientes">
-              <td>{{ paciente.name }} {{ paciente.surname }}</td>
-              <td>
-                <button
-                  id="button-add-pac-{{ paciente.id }}"
-                  class="btn btn-primary mt-2 mb-2"
-                  (click)="clickPaciente(paciente)"
-                >
-                  Seleccionar
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  <div
+    class="container"
+    *ngIf="
+      (especialistaSelected == null || especialidadSelected == null) && list$
+        | async as list
+    "
+  >
+    <div class="row">
+      <div
+        class="container-esp"
+        *ngFor="let esp of list"
+        (click)="selectEsp(esp)"
+      >
+        <img class="img-esp" src="{{ esp.photo }}" />
+        <div class="card-inner">
+          <div class="header">{{ esp.name | slice: 0:11 }}</div>
+          <div class="header">{{ esp.surname | slice: 0:11 }}</div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="card-header">
-    <h3>Solicitar Turno</h3>
 
-    <!-- Mostrar Especialistas y Especialidades -->
-
-    <!-- TURNO -->
-    <form [formGroup]="formTurno" (ngSubmit)="onAdd()">
-      <input
-        *ngIf="!this.especialista"
-        type="text"
-        class="form-control"
-        placeholder="Seleccione Especialista.."
-        disabled
-      />
-
-      <input
-        *ngIf="this.especialista"
-        type="text"
-        class="form-control"
-        placeholder="Horarios de Atención: {{
-          this.especialista.schedule.start
-        }}hs a {{ this.especialista.schedule.end }}hs"
-        disabled
-      />
-
-      <input
-        *ngIf="
-          (this.user$ | async) &&
-          this.user$[0]?.user == 'ADMINISTRADOR' &&
-          !this.paciente
-        "
-        type="text"
-        class="form-control"
-        placeholder="Seleccione Paciente.."
-        disabled
-      />
-
-      <input
-        *ngIf="this.paciente"
-        type="text"
-        class="form-control"
-        placeholder="{{ this.paciente.surname }}, {{ this.paciente.name }}"
-        disabled
-      />
-
-      <input
-        type="number"
-        class="form-control"
-        id="day"
-        placeholder="Ingrese Dia.."
-        formControlName="day"
-      />
-      <div *ngFor="let error of errorMessages.day">
-        <ng-container
-          *ngIf="day?.hasError(error.type) && (day.dirty || day.touched)"
-        >
-          <small class="error-message">{{ error.message }}</small>
-        </ng-container>
-      </div>
-
-      <input
-        type="text"
-        class="form-control"
-        id="time"
-        placeholder="Ingrese Hora.."
-        formControlName="time"
-      />
-      <div *ngFor="let error of errorMessages.time">
-        <ng-container
-          *ngIf="time?.hasError(error.type) && (time.dirty || time.touched)"
-        >
-          <small class="error-message">{{ error.message }}</small>
-        </ng-container>
-      </div>
-
-      <div *ngIf="!especialista && this.time.value && this.day.value">
-        <small class="error-message"
-          >Recuerde seleccionar un Especialista</small
-        >
-      </div>
-
+  <div
+    class="container"
+    *ngIf="especialistaSelected && especialidadSelected && !dateSelected"
+  >
+    <div class="row">
       <div
-        *ngIf="
-          !paciente &&
-          especialista &&
-          this.time.value &&
-          this.day.value &&
-          (this.user$ | async) &&
-          this.user$[0]?.user == 'ADMINISTRADOR'
-        "
+        id="container-date"
+        class="container-esp"
+        *ngFor="let date of listDate"
       >
-        <small class="error-message">Recuerde seleccionar un Paciente</small>
+        <div class="card-inner" (click)="selectDate(date)">
+          <div class="header header-title">Fecha</div>
+          <div class="header">{{ date | date: "dd/MM/yy" }}</div>
+        </div>
       </div>
-    </form>
+    </div>
+  </div>
 
-    <div class="form-group">
-      <button
-        id="btn-add"
-        class="btn btn-primary btn-lg btn-block"
-        type="submit"
-        class="btn btn-primary btn-block"
-        style="cursor: pointer"
-        (click)="onAdd()"
-        [disabled]="
-          formTurno.invalid ||
-          (!paciente &&
-            (this.user$ | async) &&
-            this.user$[0]?.user == 'ADMINISTRADOR')
-        "
+  <div
+    class="container"
+    *ngIf="
+      especialistaSelected &&
+      especialidadSelected &&
+      dateSelected &&
+      !scheduleSelected
+    "
+  >
+    <div class="row">
+      <div
+        id="container-schedule"
+        class="container-esp"
+        *ngFor="let sch of this.listSchedule"
       >
-        Solicitar
-      </button>
+        <div
+          class="card-inner"
+          *ngIf="user[0].user == 'PACIENTE'"
+          (click)="selectSchedule(sch, user[0])"
+        >
+          <div class="header header-title">Fecha</div>
+          <div class="header">{{ dateSelected | date: "dd/MM/yy" }}</div>
+          <div class="header header-title">Horario</div>
+          <div class="header">{{ sch | date: "HH:mm" }}</div>
+        </div>
+        <div
+          class="card-inner"
+          *ngIf="user[0].user != 'PACIENTE'"
+          (click)="selectSchedule(sch, null)"
+        >
+          <div class="header header-title">Fecha</div>
+          <div class="header">{{ dateSelected | date: "dd/MM/yy" }}</div>
+          <div class="header header-title">Horario</div>
+          <div class="header">{{ sch | date: "HH:mm" }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="container"
+    *ngIf="scheduleSelected && !pacienteSelected && list$ | async as list"
+  >
+    <div class="row">
+      <div class="container-esp" *ngFor="let pac of list">
+        <div class="card-inner" (click)="selectPaciente(pac)">
+          <img class="img-esp" src="{{ pac.photo }}" />
+          <div class="header">{{ pac.name | slice: 0:11 }}</div>
+          <div class="header">{{ pac.surname | slice: 0:11 }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

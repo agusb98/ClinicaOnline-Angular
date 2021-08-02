@@ -25,6 +25,21 @@ export class ReportsComponent implements OnInit {
 
   public list: any[] = [];
 
+  public doughnut = false;
+
+  // options
+  view: any[] = [700, 370];
+
+  showLegend: boolean = true;
+  showLabels: boolean = true;
+
+  gradient: boolean = false;
+  isDoughnut: boolean = true;
+
+  legendPosition: string = 'below';
+
+
+
   constructor(
     private logService: LogService,
     private turnoService: TurnoService,
@@ -116,7 +131,7 @@ export class ReportsComponent implements OnInit {
         this.list.splice(i, 1);
       }
     });
-    this.list = this.list.slice(0, 6);
+    this.list = this.list.slice(0, 15);
   }
 
   getPDF() {
@@ -168,18 +183,22 @@ export class ReportsComponent implements OnInit {
       this.obs$ = this.turnoService.getByStatus('Finalizado');
       this.obs$.subscribe(turnos => {
 
-        especialidades.forEach(e => { e.count = 0; });
+        especialidades.forEach(e => { e.value = 0; });
         especialidades.forEach(esp => {
           turnos.forEach(turno => {
             if (esp.name === turno.especialista.especialidad.name) {
-              esp.count++;
+              esp.value++;
             }
           });
         });
         this.list = especialidades;
-        this.list = this.list.slice(0, 6);
+        this.list = this.list.slice(0, 15);
       })
     });
+  }
+
+  getChart() {
+    return JSON.parse(JSON.stringify(this.list));
   }
 
   getQuantity() {
@@ -218,11 +237,11 @@ export class ReportsComponent implements OnInit {
         this.list.splice(i, 1);
       }
     });
-    
-    this.list.forEach(a => a.count = 1);
+
+    this.list.forEach(a => a.value = 1);
     this.filterRepeatEspecialistas();
     this.filterRepeatEspecialistas();
-    
+
   }
 
   filterRepeatEspecialistas() {
@@ -231,8 +250,8 @@ export class ReportsComponent implements OnInit {
         const turnoI = this.list[i];
         const turnoJ = this.list[j];
 
-        if(turnoI.especialista.id == turnoJ.especialista.id){
-          this.list[i].count += this.list[j].count;
+        if (turnoI.especialista.id == turnoJ.especialista.id) {
+          this.list[i].value += this.list[j].value;
           this.list.splice(j, 1);
         }
       }
@@ -245,9 +264,14 @@ export class ReportsComponent implements OnInit {
     });
   }
 
+  getDoughnut() {
+    this.doughnut = true;
+  }
+
   onBack() {
     this.onClean();
     this.action = '';
+    this.doughnut = false;
   }
 
   onClean() {

@@ -1,4 +1,4 @@
-<div class="row" *ngIf="this.action == ''" >
+<div class="row" *ngIf="this.action == ''">
   <div class="col-xs-12 col-sm-2 col-md-3">
     <div class="card">
       <div class="image">
@@ -120,7 +120,7 @@
         <span>{{ this.dateEnd.value | date: "dd/MM/yyyy HH:mm" }}</span>
       </h6>
 
-      <table class="table table-bordered mt-4" *ngFor="let log of this.list">
+      <table class="table table-bordered mt-4">
         <thead>
           <tr class="table-primary">
             <th>Apellido</th>
@@ -128,7 +128,7 @@
             <th>Ingreso</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngFor="let log of this.list">
           <tr>
             <td>{{ log.surname }}</td>
             <td>{{ log.name }}</td>
@@ -149,28 +149,50 @@
   *ngIf="this.dateStart && this.action == 'quantityByEsp' && this.obs$ | async"
 >
   <button class="btn btn-danger" id="btn-back" (click)="onBack()">X</button>
-  <div class="row" id="htmlData">
+  <div id="htmlData">
     <div>
-      <h6 style="text-align: right">
-        Informe cantidad de operaciones por especialidad
-      </h6>
-
-      <table class="table table-bordered mt-4" *ngFor="let esp of this.list">
-        <thead>
-          <tr class="table-primary">
-            <th>Especialidad</th>
-            <th>Cantidad</th>
-          </tr>
-        </thead>
-        <tbody>
+      <h6>Informe cantidad de operaciones por especialidad</h6>
+    </div>
+    <div class="container-quantity">
+      <div class="row row-table" *ngIf="doughnut">
+        <table>
           <tr>
-            <td>{{ esp.name }}</td>
-            <td>{{ esp.count }}</td>
+            <td>
+              <ngx-charts-pie-chart
+                [results]="getChart()"
+                [view]="view"
+                [gradient]="gradient"
+                [legend]="showLegend"
+                [legendPosition]="legendPosition"
+                [labels]="showLabels"
+                [doughnut]="isDoughnut"
+              >
+              </ngx-charts-pie-chart>
+            </td>
           </tr>
-        </tbody>
-      </table>
+        </table>
+      </div>
+      <div class="row row-table"  *ngIf="!doughnut">
+        <table class="table table-bordered mt-4">
+          <thead>
+            <tr class="table-primary">
+              <th>Especialidad</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let esp of this.list">
+            <tr>
+              <td>{{ esp.name }}</td>
+              <td>{{ esp.value }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
+  <button id="btn-download" class="btn btn-success"  *ngIf="!doughnut" (click)="getDoughnut()">
+    Gráfico
+  </button>
   <button id="btn-download" class="btn btn-success" (click)="getPDF()">
     Descargar
   </button>
@@ -234,17 +256,19 @@
       el
       <span>{{ this.dateEnd.value | date: "dd/MM/yyyy HH:mm" }}</span>
 
-      <table class="table table-bordered mt-4" *ngFor="let turno of this.list">
+      <table class="table table-bordered mt-4">
         <thead>
           <tr class="table-primary">
             <th>Especialidad</th>
             <th>Cantidad</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngFor="let turno of this.list">
           <tr>
-            <td>{{ turno.especialista.surname }}, {{ turno.especialista.name }}</td>
-            <td> {{turno.count}}</td>
+            <td>
+              {{ turno.especialista.surname }}, {{ turno.especialista.name }}
+            </td>
+            <td>{{ turno.value }}</td>
           </tr>
         </tbody>
       </table>

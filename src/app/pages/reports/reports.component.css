@@ -13,6 +13,8 @@ span {
 #btn-download {
   margin-left: 59.5rem;
   width: 7rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .container {
@@ -26,8 +28,13 @@ span {
 .header{
   text-align: center;
 }
+.row-table{
+  width: 25rem;
+  margin: 0.5rem;
+  text-align: center;
+}
 
-.row{
+.container-quantity{
   text-align: center;
   display: flex;
   flex-direction: row;

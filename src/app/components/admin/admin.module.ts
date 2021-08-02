@@ -8,6 +8,8 @@ import { UserListComponent } from 'src/app/pages/admin/user-list/user-list.compo
 import { UserModule } from '../user/user.module';
 import { ReportsComponent } from 'src/app/pages/reports/reports.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
     ReactiveFormsModule,
     UserModule,
     HttpClientModule,
+    NgxChartsModule,
+    BrowserAnimationsModule
   ],
 })
 export class AdminModule { }

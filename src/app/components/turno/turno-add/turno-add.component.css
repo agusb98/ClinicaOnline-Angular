@@ -1,54 +1,54 @@
-.filter {
-  width: 42%;
+.row {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
-
-#btn-filter {
-  width: 4.9rem;
-  position: absolute;
-  top: 0rem;
-  right: 15rem;
-}
-
-input,
-select {
-  margin-bottom: 0.8rem;
-}
-
-small {
-  color: red;
-}
-
-select {
+.card {
   cursor: pointer;
 }
-
-.container {
-  min-height: 24rem;
+.img-action {
+  width: 15.1rem;
+  height: 9rem;
 }
-
-.card-header {
-  top: auto;
-  position: absolute;
-  width: 40%;
-  background-color: whitesmoke;
+.span-action {
+  font-weight: bold;
+  font-size: 2rem;
 }
-
-.container-select-esp {
-  top: auto;
-  width: 36rem;
-  margin: 0rem;
-  height: auto;
-  left: 44.5%;
-  position: relative;
-}
-
-#btn-back{
-  background-color: transparent;
-  border: none;
-  margin-left: 96.5%;
+.span-info {
+  font-weight: bold;
   font-size: 1.5rem;
-  height: 2.6rem;
-  position: absolute;
-  top: 0;
-  right: 0.0%;
+  color: antiquewhite;
+  background-color: rgba(87, 149, 231, 0.76);
+}
+.img-esp {
+  height: 6rem;
+  width: 10rem;
+  border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+.container-esp {
+  cursor: pointer;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: white;
+  border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
+  height: 10rem;
+  width: 10rem;
+}
+.container-esp:hover,
+.card:hover {
+  background-color: rgba(87, 149, 231, 0.76);
+  color: white;
+}
+#container-date {
+  height: 4rem;
+}
+#container-schedule {
+  height: 7rem;
+}
+.header-title {
+  background-color: rgba(83, 83, 83, 0.664);
+  color: white;
 }

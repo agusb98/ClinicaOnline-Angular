@@ -32,7 +32,7 @@ export function createTranslateLoader(http: HttpClient){
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent
+    NavbarComponent,
   ],
   imports: [
     TurnoModule,

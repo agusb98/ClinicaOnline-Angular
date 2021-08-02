@@ -57,7 +57,7 @@ export class UserLoginComponent implements OnInit {
         this.email = 'especialista@especialista.com';
         break;
       case 'Administrador':
-        this.email = 'bauti98k@gmail.com@gmail.com';
+        this.email = 'bauti98k@gmail.com';
         break;
     }
   }
